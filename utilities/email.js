@@ -1,22 +1,23 @@
 const nodemailer = require('nodemailer');
 const cheerio = require('cheerio');
+const dotenv = require('dotenv');
+dotenv.config({ path: 'config.env' });
 const ejs = require('ejs');
 const path = require('path'); // Import path module
-
 module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
     this.firstName = user.firstName; // Corrected splitting method
     this.url = url;
-    this.from = 'support@b-cleavefinance.com';
+    this.from = '"Michael Enterprise" <support@michael-enterprise.com>';
   }
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
       return nodemailer.createTransport({
         host: 'mail.privateemail.com',
-        secure: true,
         port: 465,
+        secure: true,
         auth: {
           user: process.env.MAIL_USERNAME,
           pass: process.env.MAIL_PASSWORD,
@@ -68,7 +69,7 @@ module.exports = class Email {
 
   async sendWelcome() {
     try {
-      await this.send('welcome', 'Welcome to B-Cleavefinance'); // Ensure the template name matches
+      await this.send('welcome', 'Welcome to Michael Enterprise'); // Ensure the template name matches
     } catch (error) {
       // Handle error for sendWelcome method
       console.error('Sending welcome email failed:', error);
@@ -105,3 +106,4 @@ module.exports = class Email {
     }
   }
 };
+

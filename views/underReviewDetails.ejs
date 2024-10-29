@@ -1,0 +1,91 @@
+<%- include('partials/userDashboardHeader.ejs') %>
+<!--************************************
+					Inner Banner Start
+			*************************************-->
+<div class="sj-innerbanner">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="sj-innerbannercontent">
+          <h1>Article Details</h1>
+          <ol class="sj-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="javascript:void(0);">Article</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--************************************
+					Inner Banner End
+			*************************************-->
+<!--************************************
+					Main Start
+			*************************************-->
+<main id="sj-main" class="sj-main sj-haslayout sj-sectionspace">
+  <div class="container">
+    <div class="row">
+      <div id="sj-twocolumns" class="sj-twocolumns">
+        <%- include('partials/dashboardNav.ejs') %>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-9 float-right">
+          <div id="sj-content" class="sj-content sj-addarticleholdcontent">
+            <div class="sj-dashboardboxtitle sj-titlewithform">
+              <h2>Articles Under Review</h2>
+            </div>
+            <div style="height: 100px;"></div>
+
+            <div class="container" style="margin-bottom: 50px;">
+              <h3 style="text-align: center;">Vol.6 No.1</h3>
+              <h4 style="text-decoration: underline;">Abstract</h4>
+              <p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore dolore magna aliqua enim adminim veniam quis
+                nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat aute irure dolor in reprehenderit in voluptate velit
+                esse cillum dolore eu fugiat nulla pariatur sed do eiusmod tempor incididunt ut labore.</p>
+
+              <h4 style="text-decoration: underline;">Authors</h4>
+              Consectetur adipisicing elit <br> Consectetur adipisicing elit
+              <p></p>
+              <a class="sj-btn" href="javascript:void(0);"><i style="font-size: large;" class="fa fa-file-pdf"></i> Download</a>
+            </div>
+
+            <!-- <nav class="sj-pagination">
+                    <ul>
+                      <li class="sj-prevpage"><a href="aticle-list.html#"><i class="fa fa-angle-left"></i> Previous</a></li>
+                      <li class="sj-active"><a href="aticle-list.html#">01</a></li>
+                      <li><a href="aticle-list.html#">02</a></li>
+                      <li><a href="aticle-list.html#">03</a></li>
+                      <li><a href="aticle-list.html#">04</a></li>
+                      <li><a href="aticle-list.html#">05</a></li>
+                      <li class="sj-nextpage"><a href="aticle-list.html#">Next <i class="fa fa-angle-right"></i></a></li>
+                    </ul>
+                  </nav> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!--************************************
+			Send Feedback Popup Start
+	*************************************-->
+<div class="sj-modalboxarea modal fade" tabindex="-1" role="dialog" id="feedbackmodal">
+  <div class="modal-dialog" role="document">
+    <div class="sj-modalcontent modal-content">
+      <div class="sj-popuptitle">
+        <h2>Action</h2>
+        <a href="https://amentotech.com/htmls/amentojourn/javascript;void(0);" class="sj-closebtn close"><i class="lnr lnr-cross" data-dismiss="modal" aria-label="Close"></i></a>
+      </div>
+      <div class="modal-body">
+        <div class="sj-popupbtn">
+          <button type="button" class="sj-btn sj-btnactive">Accept Article</button> <button type="button" class="sj-btn sj-btnactive">Reject Article</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--************************************
+			Send Feedback Popup End
+	*************************************-->
+<%- include('partials/userDashboardFooter.ejs') %>

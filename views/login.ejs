@@ -1,0 +1,69 @@
+<%- include('partials/authHeader.ejs') %>
+<!--************************************
+					Inner Banner Start
+			*************************************-->
+<div class="sj-innerbanner">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="sj-innerbannercontent">
+          <h1>Account Login</h1>
+          <ol class="sj-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="javascript:void(0);">Login</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--************************************
+					Inner Banner End
+			*************************************-->
+<!--************************************
+					Main Start
+			*************************************-->
+<main id="sj-main" class="sj-main sj-haslayout sj-sectionspace">
+  <div id="sj-twocolumns" class="sj-twocolumns">
+    <div class="container">
+      <div class="row" style="display: flex; justify-content: center;">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+          <aside id="sj-sidebarvtwo" class="sj-sidebar">
+            <div class="sj-widget sj-widgetlogin">
+              <div class="sj-widgetheading">
+                <h3>Login Now</h3>
+              </div>
+              <div class="sj-widgetcontent">
+                <form class="sj-formtheme sj-formlogin form-login">
+                  <fieldset>
+                    <div class="form-group">
+                      <input type="email" id="email" class="form-control" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" id="password" class="form-control" placeholder="Password">
+                    </div>
+                    <div class="form-group sj-forgotpass">
+                      <div class="sj-checkbox">
+                        <input type="checkbox" id="login">
+                        <label for="login">keep me logged in</label>
+                      </div>
+                      <a class="sj-forgorpass" href="/forgot-password">Forgot Password?</a>
+                    </div>
+                    <div class="sj-btnarea">
+                      <button class="sj-btn sj-btnactive login-btn" style="cursor: pointer;">Login</button>
+                    </div>
+					<p style="margin-top: 30px;">Don't have and account? <a href="/sign-up">Sign Up</a></p>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<!--************************************
+					Main End
+			*************************************-->
+<%- include('partials/authFooter.ejs') %>

@@ -1,0 +1,40 @@
+<div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-3 float-left">
+  <aside id="sj-asidebar" class="sj-asidebar sj-widgetbox">
+    <div class="sj-widgetprofile">
+      <div class="sj-widgetcontent">
+        <!-- <figure>
+          <img src="images/thumbnails/img-02.png" alt="image description">
+          <a class="sj-btnedite" href="javascript:void(0);"><i class="lnr lnr-pencil"></i></a>
+        </figure> -->
+        <div class="sj-admininfo">
+          <h3> <%= user.firstName %> <%= user.lastName %></h3>
+          <h4><%= user.role %></h4>
+        </div>
+      </div>
+    </div>
+    <div class="sj-widgetdashboard">
+      <nav id="sj-dashboardnav" class="sj-dashboardnav">
+        <ul>
+          <% if(user.role === 'admin'){ %>
+          <li><a href="/admin/dashboard"><i class="lnr lnr-briefcase"></i> <span>Dashboard</span></a></li>
+          <li><a href="/article/under-review"><i class="lnr lnr-sync"></i> <span>Articles Under Review</span></a></li>
+          <li><a href="/journals"><i class="lnr lnr-book"></i> <span>Journals</span></a></li>
+          <li><a href="/add-journal"><i class="lnr lnr-book"></i> <span>Add Journal</span></a></li>
+          <li><a href="/users"><i class="lnr lnr-users"></i> <span>Manage Users</span></a></li>
+          <li><a href="/add-event"><i class="lnr lnr-gift"></i> <span>Add Event</span></a></li>
+          <li><a href="/event-list"><i class="lnr lnr-gift"></i> <span>Events</span></a></li>
+          <li><a href="/supports"><i class="lnr lnr-envelope"></i> <span>Support Tickets</span></a></li>
+          <% } %>
+
+          <% if(user.role === 'user'){ %>
+          <li><a href="/submit-article"><i class="lnr lnr-pencil"></i> <span>Submit Article</span></a></li>
+          <li><a href="/contact-support"><i class="lnr lnr-phone"></i> <span>Contact Support</span></a></li>
+          <% } %>
+
+          <li><a href="/account"><i class="lnr lnr-cog"></i> <span>Account Settings</span></a></li>
+          <li><a style="cursor: pointer;" class="signOut-user-btn"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+</div>

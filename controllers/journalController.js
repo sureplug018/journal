@@ -2,42 +2,43 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 const Journal = require('../models/journalModel');
+const Article = require('../models/articleModel');
 
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
 });
 
-// Set up multer storage with Cloudinary
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
     let transformation = [];
-
-    // Apply transformation only if the file is an image
-    if (file.mimetype.startsWith('image')) {
-      transformation = [{ width: 500, height: 500, crop: 'limit' }];
-    }
-
-    // Determine folder and public_id based on the field name
     let folder;
     let public_id;
+    let allowed_formats;
 
     if (file.fieldname === 'imageCover') {
-      folder = 'covers'; // Folder for image covers
+      folder = 'covers';
       public_id = `cover-${Date.now()}`;
+      allowed_formats = ['jpg', 'jpeg', 'png'];
+      if (file.mimetype.startsWith('image')) {
+        transformation = [{ width: 300, height: 500, crop: 'limit' }];
+      }
     } else if (file.fieldname === 'journal') {
-      folder = 'journals'; // Folder for payment proofs
-      public_id = `journal-${Date.now()}`;
+      folder = 'journals';
+      public_id = `journal_${Date.now()}`;
+      allowed_formats = ['pdf'];
+      // transformation = [{ flags: 'attachment' }];
     }
 
     return {
       folder,
-      allowed_formats: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'], // Allowed formats for both fields
-      transformation, // Apply transformations if it's an image
-      public_id, // Use unique public_id for each file
+      allowed_formats,
+      transformation,
+      public_id,
     };
   },
 });
@@ -52,7 +53,42 @@ const upload = multer({
 ]);
 
 // Middleware to handle the upload
-exports.uploadFiles = upload;
+// Middleware function to handle file uploads and errors
+exports.uploadFiles = (req, res, next) => {
+  upload(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      // Handle Multer-specific errors
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'File size should not exceed 10MB',
+        });
+      }
+      if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Limit expected',
+        });
+      }
+      if (err.message === 'An unknown file format not allowed') {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Unsupported  file  format',
+        });
+      }
+    } else if (err) {
+      // Handle general errors
+      console.log(err);
+      return res.status(500).json({
+        status: 'fail',
+        message: err.message,
+      });
+    }
+
+    // Proceed if no errors
+    next();
+  });
+};
 
 exports.uploadJournal = async (req, res) => {
   const { volume, number, month, year } = req.body;

@@ -1,0 +1,164 @@
+<%- include('partials/userDashboardHeader.ejs') %>
+<!--************************************
+					Inner Banner Start
+			*************************************-->
+<div class="sj-innerbanner">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="sj-innerbannercontent">
+          <h1>Submit Article</h1>
+          <ol class="sj-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="javascript:void(0);">Article</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--************************************
+					Inner Banner End
+			*************************************-->
+<!--************************************
+					Main Start
+			*************************************-->
+<main id="sj-main" class="sj-main sj-haslayout sj-sectionspace">
+  <div class="container">
+    <div class="row">
+      <div id="sj-twocolumns" class="sj-twocolumns">
+        <%- include('partials/dashboardNav.ejs') %>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-9 float-right">
+          <div id="sj-content" class="sj-content sj-addarticleholdcontent sj-addarticleholdvtwo">
+            <div class="sj-dashboardboxtitle sj-titlewithform">
+              <h2>Submit Article</h2>
+            </div>
+            <div class="sj-manageallsession">
+              <!-- <form class="sj-formtheme sj-managesessionform">
+                      <fieldset>
+                        <div class="form-group">
+                          <button type="button" class="sj-btn sj-btnactive" data-toggle="modal" data-target="#reviewermodal">View Journals</button>
+                        </div>
+                      </fieldset>
+                    </form>
+                    <div style="height: 100px;"></div> -->
+              <form class="sj-formtheme">
+                <fieldset>
+                  <div class="form-group sj-inputwithicon sj-password">
+                    <select id="monthSelect" class="form-control">
+                      <option value="January">Vol.8 No. 3</option>
+                      <option value="January">Vol.8 No. 3</option>
+                      <option value="January">Vol.8 No. 3</option>
+                      <option value="January">Vol.8 No. 3</option>
+                      <option value="January">Vol.8 No. 3</option>
+                      <option value="January">Vol.8 No. 3</option>
+                      <option value="January">Vol.8 No. 3</option>
+                    </select>
+                  </div>
+                  <div class="form-group sj-inputwithicon sj-password">
+                    <input type="text" id="title" class="form-control" placeholder="Title">
+                  </div>
+                  <div class="form-group sj-inputwithicon sj-password">
+                    <textarea class="form-control" placeholder="Add Abstract" id=""></textarea>
+                  </div>
+                  <label for="journal">Article Must be a document(pdf, docx, doc)</label>
+                  <div class="form-group sj-inputwithicon sj-password">
+                    <input type="file" id="article" class="form-control">
+                  </div>
+                  <label for="author">Add Author</label>
+                  <div class="form-group sj-inputwithicon sj-password">
+                    <input type="text" id="firstName" class="form-control" placeholder="First Name">
+                  </div>
+                  <div class="form-group sj-inputwithicon sj-password">
+                    <input type="text" id="lastName" class="form-control" placeholder="Last Name">
+                  </div>
+                  <div class="form-group sj-inputwithicon sj-password">
+                    <input type="email" id="email" class="form-control" placeholder="email">
+                  </div>
+                  <div class="form-group">
+                    <button type="button" class="sj-btn sj-btnactive" data-toggle="modal" data-target="#reviewermodal">Upload Article</button>
+                  </div>
+                </fieldset>
+              </form>
+              <!-- <nav class="sj-pagination">
+                      <ul>
+                        <li class="sj-prevpage"><a href="manageeditions.html#"><i class="fa fa-angle-left"></i> Previous</a></li>
+                        <li class="sj-active"><a href="manageeditions.html#">01</a></li>
+                        <li><a href="manageeditions.html#">02</a></li>
+                        <li><a href="manageeditions.html#">03</a></li>
+                        <li><a href="manageeditions.html#">04</a></li>
+                        <li><a href="manageeditions.html#">05</a></li>
+                        <li class="sj-nextpage"><a href="manageeditions.html#">Next <i class="fa fa-angle-right"></i></a></li>
+                      </ul>
+                    </nav> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<!--************************************
+					Main End
+			*************************************-->
+
+<!--************************************
+			Send Feedback Popup Start
+	*************************************-->
+<div class="sj-modalboxarea modal fade" tabindex="-1" role="dialog" id="feedbackmodal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="sj-modalcontent modal-content">
+      <div class="sj-popuptitle">
+        <h2>Edit Journal</h2>
+        <a href="https://amentotech.com/htmls/amentojourn/javascript;void(0);" class="sj-closebtn close"><i class="lnr lnr-cross" data-dismiss="modal" aria-label="Close"></i></a>
+      </div>
+      <div class="modal-body">
+        <div style="padding: 30px 30px;">
+          <form class="sj-formtheme">
+            <fieldset>
+              <div class="form-group sj-inputwithicon sj-password">
+                <input type="text" class="form-control" placeholder="Volume">
+              </div>
+              <div class="form-group sj-inputwithicon sj-password">
+                <input type="text" class="form-control" placeholder="Number">
+              </div>
+              <div class="form-group sj-inputwithicon sj-password">
+                <select id="monthSelect" class="form-control">
+                  <option value="January">January</option>
+                  <option value="February">February</option>
+                  <option value="March">March</option>
+                  <option value="April">April</option>
+                  <option value="May">May</option>
+                  <option value="June">June</option>
+                  <option value="July">July</option>
+                  <option value="August">August</option>
+                  <option value="September">September</option>
+                  <option value="October">October</option>
+                  <option value="November">November</option>
+                  <option value="December">December</option>
+                </select>
+
+              </div>
+              <div class="form-group sj-inputwithicon sj-password">
+                <input type="text" class="form-control" placeholder="Year">
+              </div>
+              <label for="imageCover">Journal Cover Must be an image(jpg, jpeg, png)</label>
+              <div class="form-group sj-inputwithicon sj-password">
+                <input type="file" id="imageCover" class="form-control">
+              </div>
+              <label for="journal">Journal Must be a document(pdf, docx, doc)</label>
+              <div class="form-group sj-inputwithicon sj-password">
+                <input type="file" id="journal" class="form-control">
+              </div>
+            </fieldset>
+          </form>
+        </div>
+        <div class="sj-btnarea sj-updatebtns">
+          <a href="javascript:void(0);" class="sj-btn sj-btnactive">Add Event</a>
+          <a href="javascript:void(0);" class="sj-btncancel" data-dismiss="modal" aria-label="Close">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('partials/userDashboardFooter.ejs') %>

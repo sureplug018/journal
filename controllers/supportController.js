@@ -13,9 +13,10 @@ exports.createSupport = async (req, res) => {
       },
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({
       status: 'error',
-      message: 'Internal Server Error',
+      message: err.message,
     });
   }
 };

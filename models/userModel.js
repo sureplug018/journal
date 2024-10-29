@@ -1,18 +1,18 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
-const validator = require("validator");
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     trim: true,
-    required: [true, "A user must have a first name"],
+    required: [true, 'A user must have a first name'],
   },
   lastName: {
     type: String,
     trim: true,
-    required: [true, "A user must have a last name"],
+    required: [true, 'A user must have a last name'],
   },
   email: {
     type: String,
@@ -23,12 +23,8 @@ const userSchema = new mongoose.Schema({
       validator: function (value) {
         return validator.isEmail(value);
       },
-      message: "Invalid email address",
+      message: 'Invalid email address',
     },
-  },
-  photo: {
-    type: String,
-    default: "default.jpg",
   },
   confirmed: {
     type: Boolean,
@@ -36,9 +32,9 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    required: [true, "A user must have a role"],
-    enum: ["user", "admin"],
-    default: "user",
+    required: [true, 'A user must have a role'],
+    enum: ['user', 'admin'],
+    default: 'user',
   },
   password: {
     type: String,
@@ -48,7 +44,7 @@ const userSchema = new mongoose.Schema({
       validator: function (value) {
         return value.length >= 8;
       },
-      message: "Passwords must be up to 8 characters",
+      message: 'Passwords must be up to 8 characters',
     },
     select: false,
   },
@@ -59,20 +55,8 @@ const userSchema = new mongoose.Schema({
       validator: function (value) {
         return value === this.password;
       },
-      message: "Password does not match",
+      message: 'Password does not match',
     },
-  },
-  username: {
-    type: String,
-    required: [true, "A user must have a username"],
-  },
-  balance: {
-    type: Number,
-    default: 0,
-  },
-  interestBalance: {
-    type: Number,
-    default: 0,
   },
   confirmationTokenExpires: Date,
   passwordChangedAt: Date,
@@ -82,16 +66,7 @@ const userSchema = new mongoose.Schema({
   createdAt: Date,
   phoneNumber: {
     type: String,
-    required: [true, "A user must have a phone a phone number"],
-  },
-  myReferralCode: {
-    type: String,
-    unique: true,
-  },
-  referral: String,
-  referralsNumber: {
-    type: Number,
-    default: 0,
+    required: [true, 'A user must have a phone a phone number'],
   },
   refreshToken: {
     type: String,
@@ -100,16 +75,16 @@ const userSchema = new mongoose.Schema({
 });
 
 //creating a timestamp for each time password is changed
-userSchema.pre("save", function (next) {
-  if (!this.isModified("password") || this.isNew) return next();
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
 // hashing and salting password before saving
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
 
   this.password = await bcrypt.hash(this.password, 12);
 
@@ -120,7 +95,7 @@ userSchema.pre("save", async function (next) {
 // comparing provided password with the one saved in database before logging user in
 userSchema.methods.correctPassword = async function (
   candidatePassword,
-  userPassword
+  userPassword,
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
@@ -130,7 +105,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
-      10
+      10,
     );
     return JWTTimestamp < changedTimestamp;
   }
@@ -139,12 +114,12 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
 // generating password reset token and setting time for expiration
 userSchema.methods.createPasswordResetToken = function () {
-  const resetToken = crypto.randomBytes(32).toString("hex");
+  const resetToken = crypto.randomBytes(32).toString('hex');
 
   this.passwordResetToken = crypto
-    .createHash("sha256")
+    .createHash('sha256')
     .update(resetToken)
-    .digest("hex");
+    .digest('hex');
 
   // console.log({ resetToken }, this.passwordResetToken);
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
@@ -152,57 +127,9 @@ userSchema.methods.createPasswordResetToken = function () {
 };
 
 // adding timestamp to any created document
-userSchema.pre("save", function (next) {
+userSchema.pre('save', function (next) {
   this.createdAt = Date.now();
   next();
-});
-
-// Define the function outside of the middleware to generate referral code
-function generateRandomString(length) {
-  const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  let randomString = "";
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    randomString += charset.charAt(randomIndex);
-  }
-  return randomString;
-}
-
-// Attach the pre-save middleware to the schema
-userSchema.pre("save", async function (next) {
-  try {
-    // Check if the document being saved is new or already exists
-    if (this.isNew) {
-      // Generate a new referral code only for new documents
-      let unique = false;
-      let newReferralCode;
-
-      // Loop until a unique referral code is generated
-      while (!unique) {
-        // Generate a new random referral code
-        newReferralCode = generateRandomString(6);
-
-        // Check if the generated code already exists in the database
-        const existingUser = await User.findOne({
-          myReferralCode: newReferralCode,
-        });
-
-        // If no user is found with the generated referral code, it is unique
-        if (!existingUser) {
-          unique = true;
-        }
-      }
-
-      // Set the generated unique referral code to the document's myReferralCode field
-      this.myReferralCode = newReferralCode;
-    }
-
-    // Proceed to save the document
-    next();
-  } catch (error) {
-    // Handle any errors
-    next(error);
-  }
 });
 
 // setting a query middleware for it to find only users that their active status is not equal to false
@@ -211,6 +138,6 @@ userSchema.pre(/^find/, function (next) {
   next();
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

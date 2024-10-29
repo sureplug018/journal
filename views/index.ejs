@@ -1,0 +1,402 @@
+<!doctype html>
+<!--[if lt IE 7]>		<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>			<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>			<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="zxx">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title><%= title %> | The Flagship Journal</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="/images/favicon.png" type="image/x-icon">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/fontawesome/fontawesome-all.css">
+  <link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/css/linearicons.css">
+  <link rel="stylesheet" href="/css/themify-icons.css">
+  <link rel="stylesheet" href="/css/owl.carousel.css">
+  <link rel="stylesheet" href="/css/chartist.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/color.css">
+  <link rel="stylesheet" href="/css/transitions.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <script src="/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+  <script src="https://kit.fontawesome.com/fe5872a91f.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="sj-home">
+  <!--[if lt IE 8]>
+		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+	<![endif]-->
+  <!--************************************
+				Preloader Start
+	*************************************-->
+  <div class="preloader-outer">
+    <div class='loader'>
+      <div class='loader--dot'></div>
+      <div class='loader--dot'></div>
+      <div class='loader--dot'></div>
+      <div class='loader--dot'></div>
+    </div>
+  </div>
+  <!--************************************
+				Preloader End
+	*************************************-->
+  <!--************************************
+			Wrapper Start
+	*************************************-->
+  <div id="sj-wrapper" class="sj-wrapper">
+    <!--************************************
+				Content Wrapper Start
+		*************************************-->
+    <div class="sj-contentwrapper">
+      <!--************************************
+					Header Start
+			*************************************-->
+      <header id="sj-header" class="sj-header sj-haslayout">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div class="sj-topbar">
+                <ul class="sj-socialicons sj-socialiconssimple">
+                  <li class="sj-facebook"><a href="javascript:void(0);"><i class="fa fa-facebook-f"></i></a></li>
+                  <li class="sj-twitter"><a href="javascript:void(0);"><i class="fab fa-twitter"></i></a></li>
+                  <li class="sj-linkedin"><a href="javascript:void(0);"><i class="fab fa-linkedin-in"></i></a></li>
+                  <li class="sj-googleplus"><a href="javascript:void(0);"><i class="fab fa-google-plus-g"></i></a></li>
+                </ul>
+                <div class="sj-languagelogin">
+                  <% if(!user){ %>
+                  <div class="sj-loginarea">
+                    <ul class="sj-loging">
+                      <li><a href="/login">Login</a></li>
+                      <li><a href="/sign-up">Register</a></li>
+                    </ul>
+                  </div>
+                  <% } %>
+                  <% if(user) { %>
+                  <div class="sj-loginarea" style="display: flex; align-items: center;">
+                    <i class="fa fa-user" style="font-size: 35px; color: #6E3F29;"></i>
+                    <a href="/account" style="text-decoration: none;">
+                      <div class="sj-loginusername" style="display: inline-block;">
+                        <h3>Hi, <%= user.firstName %></h3>
+                        <!-- <span>Author</span> -->
+                      </div>
+                    </a>
+                  </div>
+                  <% } %>
+                </div>
+              </div>
+              <div class="sj-navigationarea">
+                <strong class="sj-logo"><a href="index.html"><img src="/images/logo.png" alt="company logo here"></a></strong>
+                <div class="sj-rightarea">
+                  <nav id="sj-nav" class="sj-nav navbar-expand-lg">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                      <i class="lnr lnr-menu"></i>
+                    </button>
+                    <div class="collapse navbar-collapse sj-navigation" id="navbarNav">
+                      <ul>
+                        <li>
+                          <a href="/"><i class="lnr lnr-home"></i> Home</a>
+                        </li>
+                        <li>
+                          <a href="/about-us">About</a>
+                        </li>
+                        <li>
+                          <a href="/editorial-team">Editorial Team</a>
+                        </li>
+                        <li>
+                          <a href="/submission-guidelines">Submission Guidelines</a>
+                        </li>
+                        <li><a href="/journal-issues">Journal Issues</a></li>
+                        <li>
+                          <a href="/events">Events</a>
+                        </li>
+                        <li>
+                          <a href="/contact-us">Contact</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </nav>
+                  <!-- <a class="sj-btntopsearch" href="index.html#sj-searcharea"><i class="lnr lnr-magnifier"></i></a> -->
+                  <% if(user){ %>
+                  <a class="sj-btn sj-btnactive" href="/submit-article">Submit Your Article</a>
+                  <% }else{ %>
+                  <a class="sj-btn sj-btnactive" href="/login">Submit Your Article</a>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!--************************************
+					Header End
+			*************************************-->
+      <!--************************************
+					Home Banner Start
+			*************************************-->
+      <div id="sj-homebanner" class="sj-homebanner">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+              <div class="sj-postbook">
+                <figure class="sj-featureimg">
+                  <!-- <a class="sj-btnvideo" href="javascript:void(0);"><i class="lnr lnr-film-play"></i><span>Watch Video Documentary</span></a> -->
+                  <div class="sj-bookimg">
+                    <div class="sj-frontcover"><img src="images/slider/fronimg.png" alt="image description"></div>
+                  </div>
+                </figure>
+              </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+              <div class="sj-bannercontent">
+                <h1><span>We Welcome Latest</span>Research Articles in<span>Field of Science</span></h1>
+                <div class="sj-description">
+                  <p>Consectetur adipisicing elit sedaui sedaui labore quis nostrud exercitation... <a href="javascript:void(0);">Read more</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--************************************
+					Home Banner End
+			*************************************-->
+      <!--************************************
+					Main Start
+			*************************************-->
+      <main id="sj-main" class="sj-main sj-haslayout sj-sectionspace">
+        <div class="sj-haslayout">
+          <div class="container" style="background-color: #fcfcfc; padding: 50px 30px;">
+            <div class="row">
+              <!-- <div class="sj-welcomegreeting"> -->
+              <div class="col-12 col-sm-12 col-md-3 col-lg-3 sj-verticalmiddle">
+                <div style="margin-top: 15px; height: 120px; width: 100%; background-color: white; border-color: #666; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: flex; justify-content: center;">
+                  <div class="row" style="margin-top: 20px;">
+                    <div class="col-3">
+                      <i class="fa-brands fa-readme" style="color: #7d5959; font-size: 40px;"></i>
+                    </div>
+                    <div class="col-9">
+                      <p style="font-weight: bolder;">Read guidelines</p>
+                      Read our submission <br> guidelines
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-12 col-sm-12 col-md-3 col-lg-3 sj-verticalmiddle">
+                <div style="margin-top: 15px; height: 120px; width: 100%; background-color: white; border-color: #666; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: flex; justify-content: center;">
+                  <div class="row" style="margin-top: 20px;">
+                    <div class="col-3">
+                      <i class="fa-solid fa-book-open" style="color: #7d5959; font-size: 40px;"></i>
+                    </div>
+                    <div class="col-9">
+                      <p style="font-weight: bolder;">Submit Article</p>
+                      Submit article to <br> <a href="mailto:editor@theflagshipjournal">editor@theflagshipjournal</a>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-12 col-sm-12 col-md-3 col-lg-3 sj-verticalmiddle">
+                <div style=" margin-top: 15px; height: 120px; width: 100%; background-color: white; border-color: #666; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: flex; justify-content: center;">
+                  <div class="row" style="margin-top: 20px;">
+                    <div class="col-3">
+                      <i class="fa-solid fa-magnifying-glass" style="color: #7d5959; font-size: 40px;"></i>
+                    </div>
+                    <div class="col-9">
+                      <p style="font-weight: bolder;">Review Article</p>
+                      Article is under review
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-12 col-sm-12 col-md-3 col-lg-3 sj-verticalmiddle">
+                <div style="margin-top: 15px; height: 120px; width: 100%; background-color: white; border-color: #666; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: flex; justify-content: center;">
+                  <div class="row" style="margin-top: 20px;">
+                    <div class="col-3">
+                      <i class="fa-solid fa-check-to-slot" style="color: #7d5959; font-size: 40px;"></i>
+                    </div>
+                    <div class="col-9">
+                      <p style="font-weight: bolder;">Publish Article</p>
+                      Article is published
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <!-- </div> -->
+            </div>
+          </div>
+        </div>
+        <div id="sj-twocolumns" class="sj-twocolumns">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-sm-12 col-md-8 col-lg-9">
+                <div id="sj-content" class="sj-content">
+                  <!--************************************
+										Editor's Pick Start
+								*************************************-->
+                  <section class="sj-haslayout sj-sectioninnerspace">
+                    <div class="sj-borderheading">
+                      <h3>Current Issue</h3>
+                    </div>
+                    <div id="sj-editorchoiceslider" class="sj-editorchoiceslider sj-editorschoice owl-carousel">
+                      <div class="item">
+                        <article class="sj-post sj-editorchoice">
+                          <div class="sj-postcontent">
+                            <h4 style="font-weight: bold;">Vol.6 (2023): AHYU: A JOURNAL OF LANGUAGE AND LITERATURE</h4>
+                            <p style="font-weight: bold;"></p>
+                            <div class="sj-head">
+                              <span class="sj-username"><a href="javascript:void(0);">Hillary Farnham</a></span>
+                              <h3><a href="javascript:void(0);">Toward Better-Quality Compounded Drugs — An Update form</a></h3>
+                            </div>
+                            <div class="sj-description">
+                              <p>Consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco...</p>
+                            </div>
+                            <a class="sj-btn" href="" style="background-color: #6E3F29; text-decoration: none;"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
+                          </div>
+                        </article>
+                      </div>
+                    </div>
+                  </section>
+                  <!--************************************
+										News Articles End
+								*************************************-->
+                </div>
+              </div>
+              <%- include('partials/aside.ejs') %>
+            </div>
+          </div>
+        </div>
+      </main>
+      <!--************************************
+					Main End
+			*************************************-->
+      <!--************************************
+					Footer Start
+			*************************************-->
+      <footer id="sj-footer" class="sj-footer sj-haslayout">
+        <div class="container">
+          <div class="row">
+            <a class="sj-btnscrolltotop" href="javascript:void(0);"><i class="fa fa-angle-up"></i></a>
+            <div class="sj-footercolumns">
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3 float-left">
+                <div class="sj-fcol sj-footeraboutus">
+                  <strong class="sj-logo">
+                    <a href="index.html"><img src="/images/logo.png" alt="image description"></a>
+                  </strong>
+                  <div class="sj-description">
+                    <p>Eiusmod tempor incididunt ut labore etai dolore magna aliqua enim nostrud exercitation... <a href="javascript:void(0);">Read More</a></p>
+                  </div>
+                  <ul class="sj-socialicons sj-socialiconssimple">
+                    <li class="sj-facebook"><a href="javascript:void(0);"><i class="fab fa-facebook-f"></i></a></li>
+                    <li class="sj-twitter"><a href="javascript:void(0);"><i class="fab fa-twitter"></i></a></li>
+                    <li class="sj-linkedin"><a href="javascript:void(0);"><i class="fab fa-linkedin-in"></i></a></li>
+                    <li class="sj-googleplus"><a href="javascript:void(0);"><i class="fab fa-google-plus-g"></i></a></li>
+                    <li class="sj-rss"><a href="javascript:void(0);"><i class="fa fa-rss"></i></a></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3 float-left">
+                <div class="sj-fcol sj-widget sj-widgetusefullinks">
+                  <div class="sj-widgetheading">
+                    <h3>By Specialty</h3>
+                  </div>
+                  <div class="sj-widgetcontent">
+                    <ul>
+                      <li><a href="javascript:void(0);">Contact Us</a></li>
+                      <li><a href="javascript:void(0);">Careers @ Amentojourn</a></li>
+                      <li><a href="javascript:void(0);">Get Help and Support</a></li>
+                      <li><a href="javascript:void(0);">Rights &amp; Permissions</a></li>
+                      <li class="sj-more"><a href="javascript:void(0);">more</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3 float-left">
+                <div class="sj-fcol sj-widget sj-widgetresources">
+                  <div class="sj-widgetheading">
+                    <h3>Resources</h3>
+                  </div>
+                  <div class="sj-widgetcontent">
+                    <ul>
+                      <li><a href="javascript:void(0);">Authors</a></li>
+                      <li><a href="javascript:void(0);">Librarians</a></li>
+                      <li><a href="javascript:void(0);">Sponsors &amp; Advertisers</a></li>
+                      <li><a href="javascript:void(0);">Press &amp; Media</a></li>
+                      <li class="sj-more"><a href="javascript:void(0);">more</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3 float-left">
+                <div class="sj-fcol sj-widget sj-widgetcontactus">
+                  <div class="sj-widgetheading">
+                    <h3>Get In Touch</h3>
+                  </div>
+                  <div class="sj-widgetcontent">
+                    <ul>
+                      <li><i class="lnr lnr-home"></i>
+                        <address>123 Office St, ABC Building, Melbourne, Australia. </address>
+                      </li>
+                      <li><a href="tel:(+4)123456789101"><i class="lnr lnr-phone"></i><span>(+4) 1234 5678 9101</span></a></li>
+                      <li><a href="tel:(+4)123456789101"><i class="lnr lnr-screen"></i><span>(+4) 4321 8765 1019</span></a></li>
+                      <li><a href="mailto:info@yourdomain.com"><i class="lnr lnr-envelope"></i><span>info@yourdomain.com</span></a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sj-footerbottom">
+              <p class="sj-copyrights">© 2019 <span>Amentojourn</span>. All Rights Reserved</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <!--************************************
+                                        Footer End
+                                *************************************-->
+    </div>
+    <!--************************************
+                                    Content Wrapper End
+                            *************************************-->
+  </div>
+  <!--************************************
+                                Wrapper End
+                        *************************************-->
+  <!--************************************
+                                Search Start
+                        *************************************-->
+  <div id="sj-searcharea" class="sj-searcharea">
+    <button type="button" class="close">×</button>
+    <form class="sj-formtheme sj-formsearcmain">
+      <input type="search" value="" placeholder="Search Here..." />
+      <button type="submit" class="sj-btn sj-btnactive"><span>Search</span></button>
+    </form>
+  </div>
+  <!--************************************
+                                Search End
+                        *************************************-->
+  <script src="/js/vendor/jquery-3.3.1.js"></script>
+  <script src="/js/vendor/jquery-library.js"></script>
+  <script src="/js/vendor/bootstrap.min.js"></script>
+  <script src="/js/owl.carousel.min.js"></script>
+  <script src="/js/circle-progress.js"></script>
+  <script src="/js/scrollbar.min.js"></script>
+  <script src="/js/chartist.min.js"></script>
+  <script src="/js/countdown.js"></script>
+  <script src="/js/appear.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/js/api.js"></script>
+</body>
+
+</html>

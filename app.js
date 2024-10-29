@@ -5,9 +5,10 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/userRoutes');
 const supportRoutes = require('./routes/supportRoutes');
-const editorRoutes = require('./routes/editorRoutes');
+const eventRoutes = require('./routes/eventRoutes');
 const journalRoutes = require('./routes/journalRoutes');
-// const viewsRoutes = require('./routes/viewsRoutes');
+const articleRoutes = require('./routes/articleRoutes');
+const viewsRoutes = require('./routes/viewsRoutes');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -37,10 +38,11 @@ app.use(mongoSanitize());
 app.use(express.static('./public'));
 
 // routes
-// app.use('/', viewsRoutes);
+app.use('/', viewsRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/supports', supportRoutes);
-app.use('/api/v1/editors', editorRoutes);
+app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/journals', journalRoutes);
+app.use('/api/v1/articles', articleRoutes);
 
 module.exports = app;

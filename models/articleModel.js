@@ -14,7 +14,6 @@ const authorSchema = new mongoose.Schema({
     required: true,
     match: [/.+\@.+\..+/, 'Please fill a valid email address'],
   },
-  biography: String,
 });
 
 const articleSchema = new mongoose.Schema({
@@ -40,14 +39,17 @@ const articleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  keywords: {
-    type: String,
-    required: true,
-  },
   status: {
     type: String,
     required: true,
-    enum: ['Under review', 'Approved', 'Declined'],
+    enum: [
+      'Under review',
+      'Accept Article',
+      'Reject Article',
+      'Minor Revision',
+      'Major Revision',
+    ],
+    default: 'Accept Article',
   },
 });
 

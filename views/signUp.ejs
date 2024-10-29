@@ -1,0 +1,74 @@
+<%- include('partials/authHeader.ejs') %>
+<!--************************************
+					Inner Banner Start
+			*************************************-->
+<div class="sj-innerbanner">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="sj-innerbannercontent">
+          <h1>Become an Author</h1>
+          <ol class="sj-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="javascript:void(0);">Register</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--************************************
+					Inner Banner End
+			*************************************-->
+<!--************************************
+					Main Start
+			*************************************-->
+<main id="sj-main" class="sj-main sj-haslayout sj-sectionspace">
+  <div id="sj-twocolumns" class="sj-twocolumns">
+    <div class="container">
+      <div class="row" style="display: flex; justify-content: center;">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+          <aside id="sj-sidebarvtwo" class="sj-sidebar">
+            <div class="sj-widget sj-widgetlogin">
+              <div class="sj-widgetheading">
+                <h3>Register</h3>
+              </div>
+              <div class="sj-widgetcontent">
+                <form class="sj-formtheme sj-formlogin form-signup">
+                  <fieldset>
+                    <div class="form-group">
+                      <input type="text" id="firstName" class="form-control" placeholder="First Name">
+                    </div>
+                    <div class="form-group">
+                      <input type="text" id="lastName" class="form-control" placeholder="Last Name">
+                    </div>
+                    <div class="form-group">
+                      <input type="email" id="email" class="form-control" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                      <input type="text" id="phoneNumber" class="form-control" placeholder="Phone Number">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" id="password" class="form-control" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" id="passwordConfirm" class="form-control" placeholder="Confirm Password">
+                    </div>
+                    <div class="sj-btnarea">
+                      <button class="sj-btn sj-btnactive btn--signup" style="cursor: pointer;">Sign Up</Button>
+                    </div>
+                    <p style="margin-top: 30px;">Already have and account? <a href="/login">Sign In</a></p>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<!--************************************
+					Main End
+			*************************************-->
+<%- include('partials/authFooter.ejs') %>

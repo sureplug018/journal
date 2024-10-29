@@ -13,9 +13,11 @@ router.post(
 );
 
 router.patch(
-  '/update-journal/:journalId',
+  '/edit-journal/:journalId',
   journalController.uploadFiles,
   journalController.editJournal,
 );
+
+router.delete('/delete-journal/:journalId', journalController.deleteJournal);
 
 module.exports = router;

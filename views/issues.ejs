@@ -1,0 +1,66 @@
+<%- include('partials/landingPageHeader.ejs') %>
+<!--************************************
+					Inner Banner Start
+			*************************************-->
+<div class="sj-innerbanner">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="sj-innerbannercontent">
+          <h1>Issue Index</h1>
+          <ol class="sj-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="javascript:void(0);">Issues</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--************************************
+					Inner Banner End
+			*************************************-->
+<!--************************************
+					Main Start
+			*************************************-->
+<main id="sj-main" class="sj-main sj-haslayout sj-sectionspace">
+  <div id="sj-twocolumns" class="sj-twocolumns">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-8 col-lg-9">
+          <section class="sj-haslayout sj-sectioninnerspace">
+            <div class="sj-borderheading">
+              <h3>Current Issue</h3>
+            </div>
+            <div id="sj-editorchoiceslider" class="sj-editorchoiceslider sj-editorschoice owl-carousel">
+              <div class="item">
+                <article class="sj-post sj-editorchoice">
+                  <a href="/journal-issues/vol-slug">
+                    <figure class="sj-postimg">
+                      <img src="images/editorchoice/img-03.jpg" alt="image description">
+                    </figure>
+                  </a>
+                  <div class="sj-postcontent">
+                    <!-- <div class="sj-head">
+								            <h3><a href="javascript:void(0);">A Milestone for CART Cells &amp; Treatment</a></h3>
+								          </div> -->
+                    <div class="sj-description">
+                      <p>Vol.8 <span style="margin-right: 10px;"></span> No.2 <span style="margin-right: 10px;"></span> July, 2024 <span style="margin-right: 10px;"></span>Published: 10-10-2024</p>
+                    </div>
+                    <a class="sj-btn" href="javascript:void(0);"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+        </div>
+        <%- include('partials/aside.ejs') %>
+      </div>
+    </div>
+  </div>
+</main>
+<!--************************************
+					Main End
+			*************************************-->
+
+<%- include('partials/landingPageFooter.ejs') %>

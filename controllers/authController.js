@@ -25,9 +25,7 @@ exports.signup = async (req, res) => {
       firstName,
       lastName,
       email,
-      username,
       phoneNumber,
-      referral,
       password,
       passwordConfirm,
     } = req.body;
@@ -50,28 +48,12 @@ exports.signup = async (req, res) => {
       }
     }
 
-    if (referral) {
-      const validRef = await User.findOne({ myReferralCode: referral });
-      if (!validRef) {
-        return res.status(400).json({
-          status: 'fail',
-          message: 'Invalid referral code',
-        });
-      }
-    }
-
-    // referral.referralsNumber += 1;
-    // // Save the changes to the database
-    // await referral.save();
-
     //  create a new user
     const newUser = await User.create({
       firstName,
       lastName,
       email,
-      username,
       phoneNumber,
-      referral, // link the referral to the user that referred the current user
       password,
       passwordConfirm,
     });
@@ -83,7 +65,7 @@ exports.signup = async (req, res) => {
     // Save the user with the updated confirmation fields
     await newUser.save();
 
-    const url = `${req.protocol}://${req.get('host')}/confirm-email/${
+    const url = `${req.protocol}://${req.get('host')}/email-confirmation/${
       newUser.confirmationToken
     }`;
     await new Email(newUser, url).sendConfirmEmail();
@@ -122,14 +104,6 @@ exports.confirmEmailBE = async (req, res) => {
     user.confirmationToken = undefined;
     user.confirmationTokenExpires = undefined;
     await user.save();
-
-    const referral = await User.findOne({ myReferralCode: user.referral });
-
-    if (referral) {
-      referral.referralsNumber += 1;
-      // // Save the changes to the database
-      await referral.save();
-    }
 
     // Send welcome email
     const url = `${req.protocol}://${req.get('host')}/user-dashboard`;
@@ -170,13 +144,6 @@ exports.confirmEmailFE = async (req, res, next) => {
     user.confirmationTokenExpires = undefined;
     await user.save();
 
-    const referral = await User.findOne({ myReferralCode: user.referral });
-
-    if (referral) {
-      referral.referralsNumber += 1;
-      // // Save the changes to the database
-      await referral.save();
-    }
     // Send welcome email
     const url = `${req.protocol}://${req.get('host')}/user-dashboard`;
     await new Email(user, url).sendWelcome();
@@ -308,8 +275,8 @@ exports.loginAdmin = async (req, res) => {
     // fetching data from database
     const user = await User.findOne({ email: sanitizedEmail }).select(
       '+password',
-    ); 
-    
+    );
+
     // comparing the input data and the saved data
     if (!user) {
       res.status(401).json({
@@ -526,7 +493,7 @@ exports.restrictTo = (...roles) => {
   };
 };
 
-exports.forgortPassword = async (req, res, next) => {
+exports.forgotPassword = async (req, res, next) => {
   // step 1: get user based on posted email
   try {
     const email = req.body.email;
@@ -558,7 +525,7 @@ exports.forgortPassword = async (req, res, next) => {
     try {
       const resetUrl = `${req.protocol}://${req.get(
         'host',
-      )}/resetPassword/${resetToken}`;
+      )}/reset-password/${resetToken}`;
 
       await new Email(user, resetUrl).sendPasswordReset();
 
@@ -609,6 +576,13 @@ exports.resetPassword = async (req, res, next) => {
 
     const password = req.body.password;
     const passwordConfirm = req.body.passwordConfirm;
+
+    if (password !== passwordConfirm) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Password does not match',
+      });
+    }
 
     const sanitisedPassword = password ? validator.escape(password) : undefined;
     const sanitizedPasswordConfirm = passwordConfirm
@@ -673,6 +647,14 @@ exports.updatePassword = async (req, res) => {
     // The rest of your code for password validation...
 
     // comparing the input data and the saved data
+
+    if (!passwordCurrent) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Enter your current password',
+      });
+    }
+
     if (!(await user.correctPassword(passwordCurrent, user.password))) {
       res.status(401).json({
         status: 'fail',
@@ -692,7 +674,7 @@ exports.updatePassword = async (req, res) => {
     if (req.body.password !== req.body.passwordConfirm) {
       return res.status(400).json({
         status: 'fail',
-        message: 'newpassword and passwod confirm does not match',
+        message: 'New password and password confirm does not match',
       });
     }
 
@@ -708,35 +690,39 @@ exports.updatePassword = async (req, res) => {
     await user.save();
 
     // Generate a new JWT token
-    // const accessToken = signAccessToken(user._id);
-    // const refreshToken = signRefreshToken(user._id);
+    const accessToken = signAccessToken(user._id);
+    const refreshToken = signRefreshToken(user._id);
 
     // Set cookies
-    // const accessCookieOptions = {
-    //   expiresIn: new Date(Date.now() + process.env.ACCESS_TOKEN_EXPIRES_IN),
-    //   secure: true,
-    //   httpOnly: true,
-    //   path: '/',
-    //   sameSite: 'none',
-    //   maxAge: 15 * 60 * 1000, //15 mins
-    // };
+    const accessCookieOptions = {
+      expiresIn: new Date(Date.now() + process.env.ACCESS_TOKEN_EXPIRES_IN),
+      secure: true,
+      httpOnly: true,
+      path: '/',
+      sameSite: 'none',
+      maxAge: 15 * 60 * 1000, //15 mins
+    };
 
-    // const refreshCookieOptions = {
-    //   expiresIn: new Date(Date.now() + process.env.REFRESH_TOKEN_EXPIRES_IN),
-    //   secure: true,
-    //   httpOnly: true,
-    //   path: '/',
-    //   sameSite: 'none',
-    //   maxAge: 30 * 24 * 60 * 60 * 1000, //30 days
-    // };
+    const refreshCookieOptions = {
+      expiresIn: new Date(Date.now() + process.env.REFRESH_TOKEN_EXPIRES_IN),
+      secure: true,
+      httpOnly: true,
+      path: '/',
+      sameSite: 'none',
+      maxAge: 30 * 24 * 60 * 60 * 1000, //30 days
+    };
 
-    // res.cookie('access-token', accessToken, accessCookieOptions);
-    // res.cookie('refresh-token', refreshToken, refreshCookieOptions);
+    res.cookie('access-token', accessToken, accessCookieOptions);
+    res.cookie('refresh-token', refreshToken, refreshCookieOptions);
+
+    // update user refresh token
+    await User.findOneAndUpdate({ email: user.email }, { refreshToken });
+
     // sending response
     res.status(200).json({
       status: 'success',
-      // accessToken,
-      // refreshToken,
+      accessToken,
+      refreshToken,
     });
   } catch (err) {
     return res.status(400).json({

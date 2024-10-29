@@ -1,0 +1,144 @@
+<%- include('partials/userDashboardHeader.ejs') %>
+<!--************************************
+					Inner Banner Start
+			*************************************-->
+<div class="sj-innerbanner">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="sj-innerbannercontent">
+          <h1>Submit Your Article</h1>
+          <ol class="sj-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="javascript:void(0);">Submit Your Aticle</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--************************************
+					Inner Banner End
+			*************************************-->
+<!--************************************
+					Main Start
+			*************************************-->
+<main id="sj-main" class="sj-main sj-haslayout sj-sectionspace">
+  <div class="container">
+    <div class="row">
+      <div id="sj-twocolumns" class="sj-twocolumns">
+        <%- include('partials/dashboardNav.ejs') %>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-9 float-right">
+          <div id="sj-content" class="sj-content sj-addarticleholdcontent sj-addarticleholdvtwo">
+            <div class="sj-dashboardboxtitle sj-titlewithform">
+              <h2>Manage Events</h2>
+            </div>
+            <div class="sj-manageallsession">
+              <form class="sj-formtheme sj-managesessionform">
+                <fieldset>
+                  <div class="form-group">
+                    <button class="sj-btn sj-btnactive" onclick="window.location.href='/add-event'">Add New Event</button>
+                  </div>
+                </fieldset>
+              </form>
+              <div style="height: 100px;"></div>
+              <% if(events.length === 0){ %>
+              <h3 style="text-align: center;">No event yet!</h3>
+              <% }else{ %>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover" style="min-width: 1000px;">
+                  <thead>
+                    <tr>
+                      <th>S/N</th>
+                      <th>Event Title</th>
+                      <th>Event Details</th>
+                      <th>Edit</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% events.forEach((event, i) => { %>
+                    <tr>
+                      <th scope="row"><%= i + 1 %></th>
+                      <td><%= event.title %></td>
+                      <td><%= event.details %></td>
+                      <td><a style="cursor: pointer;" data-toggle="modal" data-target="#feedbackmodal" data-event-id="<%= event.id %>" class="sj-pencilbtn edit-event-modal"><i class="ti-pencil"></i></a></td>
+                      <td><a style="cursor: pointer;" data-toggle="modal" data-target="#feedbackmodal2" data-event-id="<%= event.id %>" class="sj-pencilbtn delete-event-modal"><i class="ti-trash"></i></a></td>
+                    </tr>
+                    <% }) %>
+
+                  </tbody>
+                </table>
+              </div>
+              <% } %>
+
+              <!-- <nav class="sj-pagination">
+                      <ul>
+                        <li class="sj-prevpage"><a href="manageeditions.html#"><i class="fa fa-angle-left"></i> Previous</a></li>
+                        <li class="sj-active"><a href="manageeditions.html#">01</a></li>
+                        <li><a href="manageeditions.html#">02</a></li>
+                        <li><a href="manageeditions.html#">03</a></li>
+                        <li><a href="manageeditions.html#">04</a></li>
+                        <li><a href="manageeditions.html#">05</a></li>
+                        <li class="sj-nextpage"><a href="manageeditions.html#">Next <i class="fa fa-angle-right"></i></a></li>
+                      </ul>
+                    </nav> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<!--************************************
+					Main End
+			*************************************-->
+
+<!--************************************
+			Send Feedback Popup Start
+	*************************************-->
+<div class="sj-modalboxarea sj-modalboxareavtwo modal fade" tabindex="-1" role="dialog" id="feedbackmodal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="sj-modalcontent modal-content">
+      <div class="sj-popuptitle">
+        <h2>Edit Event</h2>
+        <a href="https://amentotech.com/htmls/amentojourn/javascript;void(0);" class="sj-closebtn close"><i class="lnr lnr-cross" data-dismiss="modal" aria-label="Close"></i></a>
+      </div>
+      <div class="modal-body">
+        <div style="padding: 30px 30px;">
+          <form class="sj-formtheme">
+            <fieldset>
+              <div class="form-group sj-inputwithicon sj-password">
+                <input type="text" id="title" class="form-control" placeholder="Event Title">
+              </div>
+              <div class="form-group sj-inputwithicon sj-password">
+                <Textarea class="form-control" id="details" placeholder="Enter Event Details"></Textarea>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+        <div class="sj-btnarea sj-updatebtns">
+          <a style="cursor: pointer; color: white ;" class="sj-btn sj-btnactive edit-btn">Update Event</a>
+          <a style="cursor: pointer;" class="sj-btncancel" data-dismiss="modal" aria-label="Close">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sj-modalboxarea modal fade" tabindex="-1" role="dialog" id="feedbackmodal2">
+  <div class="modal-dialog" role="document">
+    <div class="sj-modalcontent modal-content">
+      <div class="sj-popuptitle">
+        <h2>Action</h2>
+        <a href="https://amentotech.com/htmls/amentojourn/javascript;void(0);" class="sj-closebtn close"><i class="lnr lnr-cross" data-dismiss="modal" aria-label="Close"></i></a>
+      </div>
+      <div class="modal-body">
+        <div class="sj-popupbtn">
+          <button class="sj-btn sj-btnactive delete-btn">Delete Event</button> <button type="button"  data-dismiss="modal" aria-label="Close" class="sj-btn sj-btnactive">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('partials/userDashboardFooter.ejs') %>

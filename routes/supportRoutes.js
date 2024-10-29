@@ -5,7 +5,7 @@ const supportController = require('./../controllers/supportController');
 const router = express.Router();
 
 router
-  .route('/user')
+  .route('/send-support')
   .post(authController.protect, supportController.createSupport);
 
 router

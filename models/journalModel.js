@@ -23,7 +23,12 @@ const journalSchema = new mongoose.Schema({
   },
   journal: {
     type: String,
-    require: true,
+    required: true,
+  },
+  articleNumber: {
+    type: Number,
+    required: true,
+    default: 0,
   },
 });
 

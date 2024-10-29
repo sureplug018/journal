@@ -13,11 +13,11 @@ router.post('/confirm-email/:token/', authController.confirmEmailBE);
 
 router.post('/login', authController.login);
 
-router.post('/login/admin', authController.loginAdmin);
+router.post('/admin-login', authController.loginAdmin);
 
 router.get('/logout', authController.logout);
 
-router.post('/forgotPassword', authController.forgortPassword);
+router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
 router.patch(
@@ -26,12 +26,12 @@ router.patch(
   authController.updatePassword,
 );
 
-// Assuming '/update' is the route where user data can be updated
+// // Assuming '/update' is the route where user data can be updated
 router.patch(
   '/update',
   authController.protect,
-  userController.uploadUserPhoto,
-  userController.resizeUserPhoto,
+  // userController.uploadUserPhoto,
+  // userController.resizeUserPhoto,
   authController.updateUserData,
 );
 

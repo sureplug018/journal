@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>
+    <%= subject %>
+  </title>
+
+  <%- include('styles/_style') %>
+</head>
+
+<body>
+  <table class="body" role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td></td>
+        <td class="container">
+          <div class="content">
+            <!-- Rest of your HTML content -->
+            <p style="text-align: center;">
+              <img src="https://res.cloudinary.com/ditgbhb8w/image/upload/v1726564578/logo-01_ygyfdh.png" alt="Michael Enterprise Logo" width="120" style="height: auto;" />
+            </p>
+            <p>Hi <%= firstName %>,</p>
+            </p>
+            <p>
+              Thank you for shopping with Michael Enterprise!<br> We're
+              excited to confirm that your order #<%= orders.orderId %> has been successfully received.<br>
+
+            </p>
+
+            <p style="font-weight: bold;">Order details</p>
+            <ul>
+              <li>Order id: <%= orders.orderId %></li>
+              <li>Product name: <%= orders.productId.name %></li>
+              <li>Quantity: <%= orders.quantity %></li>
+              <li>Total: <%= orders.total %></li>
+              <li>Payment method: <%= orders.paymentMethod %></li>
+            </ul>
+
+            <table class="btn btn-primary" role="presentation" border="0" cellpadding="0" cellspacing="0">
+              <tbody>
+                <tr>
+                  <td align="left">
+                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                      <tbody>
+                        <tr>
+                          <td>
+                            <a href="<%= url %>" target="_blank">View dashboard</a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Should you have any questions or require further assistance,
+              please don't hesitate to reach out to our support
+              team at <a href="mailto:support@michael-enterprise.com">support@michael-enterprise.com</a> or start a live chat with our <a href="https://widget-page.smartsupp.com/widget/7a1b2eb2f432cd25169fab42945dff48342736a8">support here.</a></p>
+            Michael Enterprise <br>
+            Your gateway to convenience...
+            <!-- Footer section -->
+            <div class="footer">
+              <table class="content-block" role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <td>
+                      <span class="apple-link">Michael Enterprise, Берберовская 6с2, Rostov on Don, Russia</span>
+                      <br />
+                      Don't like these emails? <a href="#">Unsubscribe</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>

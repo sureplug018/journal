@@ -33,21 +33,58 @@ const upload = multer({
 }).single('article'); // Handle only a single 'imageCover' field
 
 // Middleware to handle the upload
-exports.uploadFiles = upload;
+// Middleware function to handle file uploads and errors
+exports.uploadFiles = (req, res, next) => {
+  upload(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      // Handle Multer-specific errors
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'File size should not exceed 10MB',
+        });
+      }
+      if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Limit expected',
+        });
+      }
+      if (err.message === 'An unknown file format not allowed') {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Unsupported  file  format',
+        });
+      }
+    } else if (err) {
+      // Handle general errors
+      console.log(err);
+      return res.status(500).json({
+        status: 'fail',
+        message: err.message,
+      });
+    }
+
+    // Proceed if no errors
+    next();
+  });
+};
 
 exports.createArticle = async (req, res) => {
-  const { title, abstract, authors, pageNumber, keywords } = req.body;
+  const { journalId } = req.params;
+
+  if (!journalId) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Journal Id is required',
+    });
+  }
+
+  const { title, pageNumber, abstract, authors } = req.body;
   if (!title) {
     return res.status(400).json({
       status: 'fail',
       message: 'Title is required',
-    });
-  }
-
-  if (!abstract) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Abstract is required',
     });
   }
 
@@ -58,10 +95,10 @@ exports.createArticle = async (req, res) => {
     });
   }
 
-  if (!keywords) {
+  if (!abstract) {
     return res.status(400).json({
       status: 'fail',
-      message: 'Keyword is required',
+      message: 'Abstract is required',
     });
   }
 
@@ -72,36 +109,27 @@ exports.createArticle = async (req, res) => {
     });
   }
 
-  // Validate images field
-  if (!req.files || !req.files.article || req.files.article.length === 0) {
+  // Validate that a file has been uploaded
+  if (!req.file) {
     return res.status(400).json({
       status: 'fail',
       message: 'Upload an article',
     });
   }
 
-  const { journalId } = req.params;
-
-  if (!journalId) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Journal Id is required',
-    });
-  }
-
   try {
-    const article = req.files.article[0].path; // Cloudinary URL
+    const article = req.file.path; // Cloudinary URL
+
     const newArticle = await Article.create({
       journal: journalId,
       title,
       abstract,
-      authors,
-      pageNumber,
-      keywords,
       article,
+      authors: JSON.parse(authors),
+      pageNumber,
     });
 
-    return res.status({
+    return res.status(200).json({
       status: 'success',
       data: {
         newArticle,
@@ -212,3 +240,5 @@ exports.deleteArticle = async (req, res) => {
     });
   }
 };
+
+// exports.submitArticle
