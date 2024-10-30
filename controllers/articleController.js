@@ -2,6 +2,7 @@ const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 const Article = require('../models/articleModel');
+const Journal = require('../models/journalModel');
 
 // Configure Cloudinary
 cloudinary.config({
@@ -102,13 +103,6 @@ exports.createArticle = async (req, res) => {
     });
   }
 
-  if (!authors) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'At least one author is required',
-    });
-  }
-
   // Validate that a file has been uploaded
   if (!req.file) {
     return res.status(400).json({
@@ -117,8 +111,24 @@ exports.createArticle = async (req, res) => {
     });
   }
 
+  if (authors.length === 0) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'At least one author is required',
+    });
+  }
+
   try {
     const article = req.file.path; // Cloudinary URL
+
+    const currentJournal = await Journal.findById(journalId);
+
+    if (!currentJournal) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Journal not found',
+      });
+    }
 
     const newArticle = await Article.create({
       journal: journalId,
@@ -128,6 +138,10 @@ exports.createArticle = async (req, res) => {
       authors: JSON.parse(authors),
       pageNumber,
     });
+
+    currentJournal.articleNumber += 1;
+
+    currentJournal.save();
 
     return res.status(200).json({
       status: 'success',
@@ -154,42 +168,162 @@ exports.editArticle = async (req, res) => {
     });
   }
 
-  const { title, abstract, authors, pageNumber, keywords } = req.body;
+  const { title, abstract, authors, pageNumber } = req.body;
 
   try {
-    const article = await Article.findById(articleId);
-    if (!article) {
+    const currentArticle = await Article.findById(articleId);
+    if (!currentArticle) {
       return res.status(404).json({
         status: 'fail',
         message: 'Article not found',
       });
     }
 
-    if (title) {
-      article.title = title;
+    // Update fields only if they are provided
+    if (title) currentArticle.title = title;
+    if (abstract) currentArticle.abstract = abstract;
+    if (authors) currentArticle.authors = JSON.parse(authors);
+    if (pageNumber) currentArticle.pageNumber = pageNumber;
+
+    // Handle imageCover update
+    const article = req.file?.article
+      ? req.file.article[0].path // Cloudinary URL
+      : currentArticle.article;
+
+    // const article = req.file.path; // Cloudinary URL
+
+    if (article) {
+      currentArticle.article = article;
     }
 
-    if (abstract) {
-      article.abstract = abstract;
+    await currentArticle.save();
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        currentArticle,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'fail',
+      message: err.message,
+    });
+  }
+};
+
+exports.deleteArticle = async (req, res) => {
+  const { articleId, journalId } = req.params;
+
+  if (!articleId) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Article Id is required',
+    });
+  }
+
+  if (!journalId) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Journal Id is required',
+    });
+  }
+
+  try {
+    const article = await Article.findById(articleId);
+    const journal = await Journal.findById(journalId);
+
+    if (!article) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Article not found',
+      });
     }
 
-    if (authors) {
-      article.authors = authors;
+    if (!journal) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Journal not found',
+      });
     }
 
-    if (pageNumber) {
-      article.pageNumber = pageNumber;
-    }
+    await article.deleteOne();
 
-    const articleFile = req.files?.article
-      ? req.files.article[0].path // Cloudinary URL
-      : article.articleFile;
+    journal.articleNumber -= 1;
 
-    if (articleFile) {
-      article.article = articleFile;
-    }
+    await journal.save();
 
-    const newArticle = await article.save();
+    return res.status(200).json({
+      status: 'success',
+      message: 'Article deleted successfully',
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'fail',
+      message: err.message,
+    });
+  }
+};
+
+exports.submitArticle = async (req, res) => {
+  const { title, abstract, authors, pageNumber, volume } = req.body;
+
+  if (!title) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Title is required',
+    });
+  }
+
+  if (!pageNumber) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Page number is required',
+    });
+  }
+
+  if (!volume) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Volume number is required',
+    });
+  }
+
+  if (!abstract) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Abstract is required',
+    });
+  }
+
+  if (!authors) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'At least one author is required',
+    });
+  }
+
+  // Validate that a file has been uploaded
+  if (!req.file) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Upload an article',
+    });
+  }
+
+  try {
+    const article = req.file.path; // Cloudinary URL
+
+    const newArticle = await Article.create({
+      journal: volume,
+      title,
+      abstract,
+      article,
+      authors,
+      pageNumber,
+    });
 
     return res.status(200).json({
       status: 'success',
@@ -206,31 +340,42 @@ exports.editArticle = async (req, res) => {
   }
 };
 
-exports.deleteArticle = async (req, res) => {
+exports.editArticleStatus = async (req, res) => {
   const { articleId } = req.params;
+  const { status } = req.body;
 
   if (!articleId) {
     return res.status(400).json({
       status: 'fail',
-      message: 'Article Id is required',
+      message: 'Article id is required',
+    });
+  }
+
+  if (!status) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Status is required',
     });
   }
 
   try {
-    const article = await Article.findById(article);
-
-    if (!article) {
+    const article = await Article.findById(articleId);
+    if (!articleId) {
       return res.status(400).json({
         status: 'fail',
         message: 'Article not found',
       });
     }
 
-    await article.deleteOne();
+    article.status = status;
+
+    await Article.save();
 
     return res.status(200).json({
       status: 'success',
-      message: 'Article deleted successfully',
+      data: {
+        article,
+      },
     });
   } catch (err) {
     console.log(err);
@@ -240,5 +385,3 @@ exports.deleteArticle = async (req, res) => {
     });
   }
 };
-
-// exports.submitArticle

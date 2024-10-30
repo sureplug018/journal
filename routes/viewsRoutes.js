@@ -62,7 +62,9 @@ router.get('/add-journal', viewsController.addJournal);
 
 router.get('/journals', viewsController.journalList);
 
-router.get('/add-journal', viewsController.addJournal);
+router.get('/journals/:journalId', viewsController.adminJournalDetails);
+
+router.get('/journal/:articleId', viewsController.articleDetailAdmin);
 
 router.get('/add-event', viewsController.addEvent);
 

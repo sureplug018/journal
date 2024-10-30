@@ -404,14 +404,26 @@ exports.underReview = async (req, res) => {
 exports.underReviewDetail = async (req, res) => {
   try {
     const user = res.locals.user;
+    const { articleId } = req.params;
 
     if (!user) {
       return res.status(302).redirect('/admin-login');
     }
 
     if (user.role === 'admin') {
+      const article = await Article.findById(articleId);
+      if (!article) {
+        return (
+          res.status(404).render(404),
+          {
+            title: 'Error',
+            message: 'Something went wrong',
+          }
+        );
+      }
       return res.status(200).render('underReviewDetails', {
         title: 'Article Details',
+        article,
         user,
       });
     }
@@ -478,7 +490,7 @@ exports.issue = async (req, res) => {
     });
   }
 };
- 
+
 exports.journalList = async (req, res) => {
   try {
     const user = res.locals.user;
@@ -627,6 +639,67 @@ exports.adminDashboard = async (req, res) => {
         journals,
         underReview,
         events,
+      });
+    }
+
+    return res.status(302).redirect('/');
+  } catch (err) {
+    return res.status(500).render('404', {
+      title: 'Error',
+      message: 'Something went wrong',
+    });
+  }
+};
+
+exports.adminJournalDetails = async (req, res) => {
+  try {
+    const user = res.locals.user;
+    const { journalId } = req.params;
+
+    if (!user) {
+      return res.status(302).redirect('/admin-login');
+    }
+
+    if (user.role === 'admin') {
+      const articles = await Article.find({ journal: journalId });
+      return res.status(200).render('admin-journal-details', {
+        title: 'Articles',
+        user,
+        articles,
+      });
+    }
+  } catch (err) {
+    return res.status(500).render('404', {
+      title: 'Error',
+      message: 'Something went wrong',
+    });
+  }
+};
+
+exports.articleDetailAdmin = async (req, res) => {
+  try {
+    const user = res.locals.user;
+    const { articleId } = req.params;
+
+    if (!user) {
+      return res.status(302).redirect('/admin-login');
+    }
+
+    if (user.role === 'admin') {
+      const article = await Article.findById(articleId);
+      if (!article) {
+        return (
+          res.status(404).render(404),
+          {
+            title: 'Error',
+            message: 'Something went wrong',
+          }
+        );
+      }
+      return res.status(200).render('article-detail-admin', {
+        title: 'Article Details',
+        article,
+        user,
       });
     }
 

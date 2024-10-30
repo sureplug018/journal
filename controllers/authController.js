@@ -183,7 +183,7 @@ exports.login = async (req, res) => {
     if (!user) {
       res.status(401).json({
         status: 'fail',
-        message: 'incorrect password or email',
+        message: 'Incorrect password or email',
       });
       return;
     }
@@ -191,7 +191,7 @@ exports.login = async (req, res) => {
     if (user.role !== 'user') {
       return res.status(401).json({
         status: 'fail',
-        message: 'This user is an admin',
+        message: 'Incorrect password or email',
       });
     }
 
@@ -207,7 +207,7 @@ exports.login = async (req, res) => {
     if (!(await user.correctPassword(password, user.password))) {
       res.status(401).json({
         status: 'fail',
-        message: 'incorrect password or email',
+        message: 'Incorrect password or email',
       });
       return;
     }
@@ -276,12 +276,11 @@ exports.loginAdmin = async (req, res) => {
     const user = await User.findOne({ email: sanitizedEmail }).select(
       '+password',
     );
-
     // comparing the input data and the saved data
     if (!user) {
       res.status(401).json({
         status: 'fail',
-        message: 'incorrect password or email',
+        message: 'Incorrect password or email',
       });
       return;
     }
@@ -289,7 +288,7 @@ exports.loginAdmin = async (req, res) => {
     if (user.role !== 'admin') {
       return res.status(401).json({
         status: 'fail',
-        message: 'This user is not an admin',
+        message: 'Incorrect password or email',
       });
     }
 
@@ -305,7 +304,7 @@ exports.loginAdmin = async (req, res) => {
     if (!(await user.correctPassword(password, user.password))) {
       res.status(401).json({
         status: 'fail',
-        message: 'incorrect password or email',
+        message: 'Incorrect password or email',
       });
       return;
     }
@@ -553,7 +552,7 @@ exports.forgotPassword = async (req, res, next) => {
   }
 };
 
-exports.resetPassword = async (req, res, next) => {
+exports.resetPassword = async (req, res) => {
   // step 1: get user based on the token
   try {
     const hashedToken = crypto
@@ -577,6 +576,20 @@ exports.resetPassword = async (req, res, next) => {
     const password = req.body.password;
     const passwordConfirm = req.body.passwordConfirm;
 
+    if (!password) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Password is required',
+      });
+    }
+
+    if (!passwordConfirm) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Confirm password is required',
+      });
+    }
+
     if (password !== passwordConfirm) {
       return res.status(400).json({
         status: 'fail',
@@ -584,49 +597,21 @@ exports.resetPassword = async (req, res, next) => {
       });
     }
 
-    const sanitisedPassword = password ? validator.escape(password) : undefined;
+    const sanitizedPassword = password ? validator.escape(password) : undefined;
     const sanitizedPasswordConfirm = passwordConfirm
       ? validator.escape(passwordConfirm)
       : undefined;
 
-    user.password = sanitisedPassword;
+    user.password = sanitizedPassword;
     user.passwordConfirm = sanitizedPasswordConfirm;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save();
 
-    // step 3: generate JWT and login the user
-    // const accessToken = signAccessToken(user._id);
-    // const refreshToken = signRefreshToken(user._id);
-
-    // Set cookies
-    // const accessCookieOptions = {
-    //   expiresIn: new Date(Date.now() + process.env.ACCESS_TOKEN_EXPIRES_IN),
-    //   secure: true,
-    //   httpOnly: true,
-    //   path: '/',
-    //   sameSite: 'none',
-    //   maxAge: 15 * 60 * 1000, //15 mins
-    // };
-
-    // const refreshCookieOptions = {
-    //   expiresIn: new Date(Date.now() + process.env.REFRESH_TOKEN_EXPIRES_IN),
-    //   secure: true,
-    //   httpOnly: true,
-    //   path: '/',
-    //   sameSite: 'none',
-    //   maxAge: 30 * 24 * 60 * 60 * 1000, //30 days
-    // };
-
-    // res.cookie('access-token', accessToken, accessCookieOptions);
-    // res.cookie('refresh-token', refreshToken, refreshCookieOptions);
     // sending response
     res.status(200).json({
       status: 'success',
-      // accessToken,
-      // refreshToken,
     });
-    next();
   } catch (err) {
     res.status(400).json({
       status: 'fail',
@@ -640,21 +625,8 @@ exports.updatePassword = async (req, res) => {
     const user = await User.findById(req.user.id).select('+password');
 
     const passwordCurrent = req.body.passwordCurrent;
-    // const sanitizedPasswordCurrent = passwordCurrent
-    //   ? validator.escape(passwordCurrent)
-    //   : undefined;
-
-    // The rest of your code for password validation...
 
     // comparing the input data and the saved data
-
-    if (!passwordCurrent) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'Enter your current password',
-      });
-    }
-
     if (!(await user.correctPassword(passwordCurrent, user.password))) {
       res.status(401).json({
         status: 'fail',
@@ -674,22 +646,19 @@ exports.updatePassword = async (req, res) => {
     if (req.body.password !== req.body.passwordConfirm) {
       return res.status(400).json({
         status: 'fail',
-        message: 'New password and password confirm does not match',
+        message: 'newPassword and Password confirm does not match',
       });
     }
 
     const password = req.body.password;
     const passwordConfirm = req.body.passwordConfirm;
 
-    // const sanitizedPassword = validator.escape(password);
-    // const sanitizedPasswordConfirm = validator.escape(passwordConfirm);
-
     // Update user password and passwordConfirm
     user.password = password;
     user.passwordConfirm = passwordConfirm;
     await user.save();
 
-    // Generate a new JWT token
+    // generating token for login
     const accessToken = signAccessToken(user._id);
     const refreshToken = signRefreshToken(user._id);
 
@@ -823,6 +792,29 @@ exports.isLoggedIn = async (req, res, next) => {
     }
 
     if (req.cookies['access-token']) {
+      const verifyToken = await User.findOne({
+        refreshToken: req.cookies['refresh-token'],
+      });
+
+      if (!verifyToken) {
+        // Clear cookies if refreshToken is not found
+        res.cookie('access-token', '', {
+          maxAge: 0,
+          httpOnly: true,
+          secure: true,
+          sameSite: 'none',
+          path: '/',
+        });
+        res.cookie('refresh-token', '', {
+          maxAge: 0,
+          httpOnly: true,
+          secure: true,
+          sameSite: 'none',
+          path: '/',
+        });
+        return next();
+      }
+
       // step 2: verification of token
       const decoded = await promisify(jwt.verify)(
         req.cookies['access-token'],

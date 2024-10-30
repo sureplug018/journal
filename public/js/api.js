@@ -720,6 +720,34 @@ if (addArticleBtn) {
     const pageNumber = document.getElementById('pageNumber').value;
     const article = document.getElementById('article').files[0];
 
+    if (!title) {
+      addArticleBtn.style.opacity = '1';
+      addArticleBtn.disabled = false;
+      addArticleBtn.textContent = 'Publish Article';
+      return showAlert('error', 'Title is required');
+    }
+
+    if (!pageNumber) {
+      addArticleBtn.style.opacity = '1';
+      addArticleBtn.disabled = false;
+      addArticleBtn.textContent = 'Publish Article';
+      return showAlert('error', 'Page number is required');
+    }
+
+    if (!abstract) {
+      addArticleBtn.style.opacity = '1';
+      addArticleBtn.disabled = false;
+      addArticleBtn.textContent = 'Publish Article';
+      return showAlert('error', 'Abstract is required');
+    }
+
+    if (!article) {
+      addArticleBtn.style.opacity = '1';
+      addArticleBtn.disabled = false;
+      addArticleBtn.textContent = 'Publish Article';
+      return showAlert('error', 'Upload a file is required');
+    }
+
     const authors = Array.from(
       document.querySelectorAll('[name="firstName[]"]'),
     )
@@ -735,6 +763,13 @@ if (addArticleBtn) {
       })
       .filter(Boolean);
 
+    if (authors.length === 0) {
+      addArticleBtn.style.opacity = '1';
+      addArticleBtn.disabled = false;
+      addArticleBtn.textContent = 'Publish Article';
+      return showAlert('error', 'Add at least one author');
+    }
+
     // Create FormData and log its contents
     const formData = new FormData();
     formData.append('title', title);
@@ -742,11 +777,6 @@ if (addArticleBtn) {
     formData.append('pageNumber', pageNumber);
     formData.append('authors', JSON.stringify(authors));
     formData.append('article', article);
-
-    // Log FormData keys and values to ensure everything is appended
-    // for (const pair of formData.entries()) {
-    //   console.log(`${pair[0]}: ${pair[1]}`);
-    // }
 
     try {
       const response = await axios.post(
@@ -773,7 +803,134 @@ if (addArticleBtn) {
     } finally {
       addArticleBtn.style.opacity = '1';
       addArticleBtn.disabled = false;
-      addArticleBtn.textContent = 'Delete Journal';
+      addArticleBtn.textContent = 'Publish Article';
+    }
+  });
+}
+
+///////////////////////              EDIT ARTICLE            ///////////////////////////
+const editArticleModal = document.querySelectorAll('.edit-article-modal');
+const editArticleBtn = document.querySelector('.edit-article-btn');
+const deleteArticleModal = document.querySelectorAll('.delete-article-modal');
+const deleteArticleBtn = document.querySelector('.delete-article-btn');
+let currentArticleIdDetail = null;
+
+editArticleModal.forEach((button) => {
+  button.addEventListener('click', function () {
+    currentArticleIdDetail = this.dataset.articleId;
+  });
+});
+
+deleteArticleModal.forEach((button) => {
+  button.addEventListener('click', function () {
+    currentArticleIdDetail = this.dataset.articleId;
+  });
+});
+
+if (editArticleBtn) {
+  editArticleBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (!currentArticleIdDetail) return;
+
+    editArticleBtn.style.opacity = '0.5';
+    editArticleBtn.disabled = true;
+    editArticleBtn.textContent = 'Processing...';
+
+    // Collect input data
+    const title = document.getElementById('title').value;
+    const abstract = document.getElementById('abstract').value;
+    const pageNumber = document.getElementById('pageNumber').value;
+    const article = document.getElementById('article').files[0];
+
+    const authors = Array.from(
+      document.querySelectorAll('[name="firstName[]"]'),
+    )
+      .map((_, i) => {
+        const firstName = document.querySelectorAll('[name="firstName[]"]')[i]
+          .value;
+        const lastName = document.querySelectorAll('[name="lastName[]"]')[i]
+          .value;
+        const email = document.querySelectorAll('[name="email[]"]')[i].value;
+        if (firstName && lastName && email) {
+          return { firstName, lastName, email };
+        }
+      })
+      .filter(Boolean);
+
+    // Create FormData and log its contents
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('abstract', abstract);
+    formData.append('pageNumber', pageNumber);
+    if (authors.length > 0) {
+      formData.append('authors', JSON.stringify(authors));
+    }
+    formData.append('article', article);
+
+    try {
+      const response = await axios.patch(
+        `/api/v1/articles/edit-article/${currentArticleIdDetail}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+
+      if (response.data.status === 'success') {
+        showAlert('success', 'Article Updated!');
+        window.setTimeout(() => {
+          location.reload();
+        }, 3000);
+      }
+    } catch (err) {
+      showAlert(
+        'error',
+        err.response ? err.response.data.message : 'Error creating article',
+      );
+    } finally {
+      editArticleBtn.style.opacity = '1';
+      editArticleBtn.disabled = false;
+      editArticleBtn.textContent = 'Update Journal';
+    }
+  });
+}
+
+if (deleteArticleBtn) {
+  deleteArticleBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    // Get the resetToken from the URL parameters
+    const urlParams = window.location.pathname.split('/').pop();
+
+    if (!currentArticleIdDetail) return;
+
+    deleteArticleBtn.style.opacity = '0.5';
+    deleteArticleBtn.textContent = 'Deleting...';
+    deleteArticleBtn.disabled = true;
+
+    try {
+      const res = await axios.delete(
+        `/api/v1/articles/delete-article/${currentArticleIdDetail}/${urlParams}`,
+      );
+
+      if (res.data.status === 'success') {
+        showAlert('success', 'Article deleted!');
+
+        window.setTimeout(() => {
+          location.reload();
+        }, 3000);
+      }
+    } catch (err) {
+      showAlert(
+        'error',
+        err.response ? err.response.data.message : 'Error deleting article',
+      );
+    } finally {
+      deleteArticleBtn.style.opacity = '1';
+      deleteArticleBtn.disabled = false;
+      deleteArticleBtn.textContent = 'Delete Article';
     }
   });
 }

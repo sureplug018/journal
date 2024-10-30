@@ -16,42 +16,41 @@ const authorSchema = new mongoose.Schema({
   },
 });
 
-const articleSchema = new mongoose.Schema({
-  journal: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Journal',
-    required: true,
+const articleSchema = new mongoose.Schema(
+  {
+    journal: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Journal',
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    authors: [authorSchema],
+    abstract: {
+      type: String,
+      required: true,
+    },
+    pageNumber: {
+      type: String,
+      required: true,
+    },
+    article: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: ['Under review', 'Accept Article', 'Approved', 'Declined'],
+      default: 'Accept Article',
+    },
   },
-  title: {
-    type: String,
-    required: true,
+  {
+    timestamps: true,
   },
-  authors: [authorSchema],
-  abstract: {
-    type: String,
-    required: true,
-  },
-  pageNumber: {
-    type: String,
-    required: true,
-  },
-  article: {
-    type: String,
-    required: true,
-  },
-  status: {
-    type: String,
-    required: true,
-    enum: [
-      'Under review',
-      'Accept Article',
-      'Reject Article',
-      'Minor Revision',
-      'Major Revision',
-    ],
-    default: 'Accept Article',
-  },
-});
+);
 
 const Article = mongoose.model('Article', articleSchema);
 

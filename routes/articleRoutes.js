@@ -12,4 +12,12 @@ router.post(
   articleController.createArticle,
 );
 
+router.patch(
+  '/edit-article/:articleId',
+  articleController.uploadFiles,
+  articleController.editArticle,
+);
+
+router.delete('/delete-article/:articleId/:journalId', articleController.deleteArticle);
+
 module.exports = router;
