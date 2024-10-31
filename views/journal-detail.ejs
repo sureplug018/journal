@@ -36,33 +36,39 @@
               <div class="item" style="margin-bottom: 100px;">
                 <article class="sj-post sj-editorchoice">
                   <figure class="sj-postimg">
-                    <img src="images/editorchoice/img-03.jpg" alt="image description">
+                    <img src="<%= journal.imageCover %>" alt="image description">
                   </figure>
                   <div class="sj-postcontent">
                     <!-- <div class="sj-head">
 								            <h3><a href="javascript:void(0);">A Milestone for CART Cells &amp; Treatment</a></h3>
 								          </div> -->
+                    <% const timeStamp = journal.createdAt %>
+                    <% const date = timeStamp.toLocaleDateString() %>
                     <div class="sj-description">
-                      <p>Vol.8 <span style="margin-right: 10px;"></span> No.2 <span style="margin-right: 10px;"></span> July, 2024 <span style="margin-right: 10px;"></span>Published: 10-10-2024</p>
+                      <p>Vol. <%= journal.volume %> <span style="margin-right: 10px;"></span> No. <%= journal.number %> <span style="margin-right: 10px;"></span> <%= journal.month %>, <%= journal.year %>
+                        <span style="margin-right: 10px;"></span>Published: <%= date %>
+                      </p>
                     </div>
-                    <a class="sj-btn" href="javascript:void(0);"><i style="font-size: large;" class="fa fa-file-pdf"></i> Download</a>
+                    <!-- <a class="sj-b÷tn" href="javascript:void(0);"><i style="font-size: large;" class="fa fa-file-pdf"></i> Download</a> -->
                   </div>
 
                   <p></p>
                 </article>
 
                 <h3 style="text-decoration: underline;">Articles</h3>
-
-                <h4 style="font-weight: bold; margin-top: 30px;"><a href="/journal-issues/vol-slug/slug">Editor-in-chief</a></h4>
-                <p>Department of Political Science, Federal University of Lafia,
-                  Nigeria.</p>
-                <a class="sj-btn" href="javascript:void(0);"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
-
-
-                <h4 style="font-weight: bold; margin-top: 30px;"><a href="/journal-issues/vol-slug/slug">Editor-in-chief</a></h4>
-                <p>Department of Political Science, Federal University of Lafia,
-                  Nigeria.</p>
-                <a class="sj-btn" href="javascript:void(0);"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
+                <% if(articles.length === 0){ %>
+                <h3 style="text-align: center;">No article found!</h3>
+                <%  }else{ %>
+                <% articles.forEach(function(article){ %>
+                <h4 style="font-weight: bold; margin-top: 30px;"><a href="/journal-issues/<%= journal.id %>/<%= article.slug %>"><%= article.title %></a></h4>
+                <p>
+                  <% const authors = article.authors.forEach(function(author){ %>
+                  <%= author.firstName %> <%= author.lastName %>,
+                  <% }) %>
+                </p>
+                <a class="sj-btn" href="<%= article.article %>"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
+                <% }) %>
+                <% } %>
 
               </div>
             </div>

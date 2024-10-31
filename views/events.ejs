@@ -24,12 +24,21 @@
           <div id="sj-content" class="sj-content">
             <div class="sj-aboutus">
               <h3 style="font-weight: bold;">Events</h3>
+              <% if(events.length === 0){ %>
               <div style="height: 20px;"></div>
-              <h5 style="text-decoration: underline;">Editor-in-chief</h5>
-              <p>Completed papers should be typeset in Microsoft word and double-spaced,
-                while the text should be in Times New Roman, 12 font size, and not exceeding 20
-                pages. The recommended referencing format is APA (6thedition) with
-                in-text citations consistent with the format.</p>
+              <h3 style="text-align: center;">No event found!</h3>
+              <% }else{ %>
+              <% events.forEach(function(event){ %>
+              <div style="height: 20px;"></div>
+              <h5 style="text-decoration: underline;"><%= event.title %></h5>
+              <% const para = event.details.split('*') %>
+
+              <% para.forEach(function(p){ %>
+              <p><%= p %></p>
+              <% }) %>
+              <% }) %>
+              <% } %>
+
             </div>
           </div>
         </div>

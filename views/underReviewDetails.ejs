@@ -36,17 +36,14 @@
             <div style="height: 100px;"></div>
 
             <div class="container" style="margin-bottom: 50px;">
-              <h3 style="text-align: center;">Vol.6 No.1</h3>
+              <h3 style="text-align: center;"><%= article.volume %></h3>
               <h4 style="text-decoration: underline;">Abstract</h4>
-              <p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore dolore magna aliqua enim adminim veniam quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                commodo consequat aute irure dolor in reprehenderit in voluptate velit
-                esse cillum dolore eu fugiat nulla pariatur sed do eiusmod tempor incididunt ut labore.</p>
+              <p><%= article.abstract %></p>
 
               <h4 style="text-decoration: underline;">Authors</h4>
-              Consectetur adipisicing elit <br> Consectetur adipisicing elit
+              <%= article.authors %>
               <p></p>
-              <a class="sj-btn" href="javascript:void(0);"><i style="font-size: large;" class="fa fa-file-pdf"></i> Download</a>
+              <a class="sj-btn" href="<%= article.article %>"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
             </div>
 
             <!-- <nav class="sj-pagination">

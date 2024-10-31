@@ -3,6 +3,7 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 const Article = require('../models/articleModel');
 const Journal = require('../models/journalModel');
+const Submission = require('../models/submissionModel');
 
 // Configure Cloudinary
 cloudinary.config({
@@ -268,8 +269,13 @@ exports.deleteArticle = async (req, res) => {
 };
 
 exports.submitArticle = async (req, res) => {
-  const { title, abstract, authors, pageNumber, volume } = req.body;
-
+  const { volume, title, pageNumber, abstract, authors } = req.body;
+  if (!volume) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Volume number is required',
+    });
+  }
   if (!title) {
     return res.status(400).json({
       status: 'fail',
@@ -284,27 +290,12 @@ exports.submitArticle = async (req, res) => {
     });
   }
 
-  if (!volume) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Volume number is required',
-    });
-  }
-
   if (!abstract) {
     return res.status(400).json({
       status: 'fail',
       message: 'Abstract is required',
     });
   }
-
-  if (!authors) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'At least one author is required',
-    });
-  }
-
   // Validate that a file has been uploaded
   if (!req.file) {
     return res.status(400).json({
@@ -312,12 +303,18 @@ exports.submitArticle = async (req, res) => {
       message: 'Upload an article',
     });
   }
+  if (!authors) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'At least one author is required',
+    });
+  }
 
   try {
     const article = req.file.path; // Cloudinary URL
 
-    const newArticle = await Article.create({
-      journal: volume,
+    const newArticle = await Submission.create({
+      volume,
       title,
       abstract,
       article,
@@ -332,6 +329,40 @@ exports.submitArticle = async (req, res) => {
       },
     });
   } catch (err) {
+    return res.status(500).json({
+      status: 'fail',
+      message: err.message,
+    });
+  }
+};
+
+exports.deleteSubmission = async (req, res) => {
+  const { articleId } = req.params;
+
+  if (!articleId) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Article Id is required',
+    });
+  }
+
+  try {
+    const article = await Submission.findById(articleId);
+
+    if (!article) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'Article not found',
+      });
+    }
+
+    await article.deleteOne();
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Article deleted successfully',
+    });
+  } catch (err) {
     console.log(err);
     return res.status(500).json({
       status: 'fail',
@@ -340,46 +371,64 @@ exports.submitArticle = async (req, res) => {
   }
 };
 
-exports.editArticleStatus = async (req, res) => {
-  const { articleId } = req.params;
-  const { status } = req.body;
+exports.searchArticle = async (req, res) => {
+  const { name } = req.query;
 
-  if (!articleId) {
+  if (!name) {
     return res.status(400).json({
       status: 'fail',
-      message: 'Article id is required',
-    });
-  }
-
-  if (!status) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Status is required',
+      message: 'No item found',
     });
   }
 
   try {
-    const article = await Article.findById(articleId);
-    if (!articleId) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'Article not found',
-      });
-    }
-
-    article.status = status;
-
-    await Article.save();
+    const articles = await Article.aggregate([
+      {
+        $search: {
+          index: 'default', // Ensure this matches your Atlas Search index name
+          compound: {
+            should: [
+              {
+                autocomplete: {
+                  query: name, // The user's input (from req.query)
+                  path: 'title',
+                  fuzzy: {
+                    maxEdits: 1, // Optional: allows minor typos
+                  },
+                },
+              },
+              {
+                autocomplete: {
+                  query: name,
+                  path: 'authors.firstName', // Search within authors' first names
+                  fuzzy: {
+                    maxEdits: 1,
+                  },
+                },
+              },
+              {
+                autocomplete: {
+                  query: name,
+                  path: 'authors.lastName', // Search within authors' last names
+                  fuzzy: {
+                    maxEdits: 1,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ]);
 
     return res.status(200).json({
       status: 'success',
       data: {
-        article,
+        articles,
       },
     });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({
+    return res.status(400).json({
       status: 'fail',
       message: err.message,
     });

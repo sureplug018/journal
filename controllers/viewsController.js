@@ -3,6 +3,7 @@ const Support = require('../models/supportModel');
 const Journal = require('../models/journalModel');
 const Event = require('../models/eventModel');
 const Article = require('../models/articleModel');
+const Submission = require('../models/submissionModel');
 
 exports.login = async (req, res) => {
   try {
@@ -59,11 +60,21 @@ exports.resetPassword = async (req, res) => {
 exports.home = async (req, res) => {
   try {
     const user = res.locals.user;
+    const currentIssue = await Journal.findOne().sort({ createdAt: -1 });
+
+    // Check if currentIssue exists before querying for articles
+    const articles = currentIssue
+      ? await Article.find({ journal: currentIssue.id })
+      : []; // Return an empty array if no journal is found
+
     return res.status(200).render('index', {
       title: 'Home',
       user,
+      currentIssue,
+      articles,
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).render('404', {
       title: 'Error',
       message: 'Something went wrong',
@@ -120,10 +131,11 @@ exports.submissionGuidelines = async (req, res) => {
 exports.issues = async (req, res) => {
   try {
     const user = res.locals.user;
-
+    const journals = await Journal.find();
     return res.status(200).render('issues', {
       title: 'Journal Issues',
       user,
+      journals,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -229,10 +241,11 @@ exports.resetPassword = async (req, res) => {
 exports.events = async (req, res) => {
   try {
     const user = res.locals.user;
-
+    const events = await Event.find();
     return res.status(200).render('events', {
       title: 'Events',
       user,
+      events,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -362,9 +375,11 @@ exports.submitArticle = async (req, res) => {
     }
 
     if (user.role === 'user') {
+      const volumes = await Journal.find().select('volume number');
       return res.status(200).render('submitArticle', {
         title: 'Submit Article',
         user,
+        volumes,
       });
     }
 
@@ -386,9 +401,11 @@ exports.underReview = async (req, res) => {
     }
 
     if (user.role === 'admin') {
+      const submissions = await Submission.find().sort({ createdAt: -1 });
       return res.status(200).render('underreview', {
         title: 'Under Review',
         user,
+        submissions,
       });
     }
 
@@ -411,7 +428,7 @@ exports.underReviewDetail = async (req, res) => {
     }
 
     if (user.role === 'admin') {
-      const article = await Article.findById(articleId);
+      const article = await Submission.findById(articleId);
       if (!article) {
         return (
           res.status(404).render(404),
@@ -462,11 +479,48 @@ exports.editAuthors = async (req, res) => {
 };
 
 exports.article = async (req, res) => {
+  const { slug, journalId } = req.params;
   try {
     const user = res.locals.user;
+    const article = await Article.findOne({ slug });
+    const journal = await Journal.findById(journalId);
+    if (!journal) {
+      return res.status(302).redirect('404');
+    }
+    if (!article) {
+      return res.status(302).render('404', {
+        title: 'Error',
+        message: 'Something went wrong',
+      });
+    }
     return res.status(200).render('articleDetail', {
       title: 'Article Details',
       user,
+      article,
+    });
+  } catch (err) {
+    return res.status(500).render('404', {
+      title: 'Error',
+      message: 'Something went wrong',
+    });
+  }
+};
+
+exports.article2 = async (req, res) => {
+  const { slug } = req.params;
+  try {
+    const user = res.locals.user;
+    const article = await Article.findOne({ slug });
+    if (!article) {
+      return res.status(302).render('404', {
+        title: 'Error',
+        message: 'Something went wrong',
+      });
+    }
+    return res.status(200).render('articleDetail', {
+      title: 'Article Details',
+      user,
+      article,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -479,9 +533,20 @@ exports.article = async (req, res) => {
 exports.issue = async (req, res) => {
   try {
     const user = res.locals.user;
+    const journalId = req.params.journalId;
+    const journal = await Journal.findById(journalId);
+    if (!journal) {
+      return res.status(404).render('404', {
+        title: 'Error',
+        message: 'Something went wrong',
+      });
+    }
+    const articles = await Article.find({ journal: journalId });
     return res.status(200).render('journal-detail', {
       title: 'Journal Issue',
       user,
+      journal,
+      articles,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -705,6 +770,43 @@ exports.articleDetailAdmin = async (req, res) => {
 
     return res.status(302).redirect('/');
   } catch (err) {
+    return res.status(500).render('404', {
+      title: 'Error',
+      message: 'Something went wrong',
+    });
+  }
+};
+
+exports.searchResult = async (req, res) => {
+  try {
+    const user = res.locals.user;
+    const { search } = req.query;
+
+    let filter = {}; // Initialize filter for the query
+
+    // Handle search functionality (if there's a search term)
+    if (search) {
+      const item = search.split('-').join(' '); // Replace dashes with spaces
+      const regex = new RegExp(item, 'i'); // Case-insensitive search
+
+      // Add search conditions to filter (search by title, authors' first or last name)
+      filter.$or = [
+        { title: { $regex: regex } },
+        { 'authors.firstName': { $regex: regex } },
+        { 'authors.lastName': { $regex: regex } },
+      ];
+    }
+
+    // Find articles based on the filter
+    const articles = await Article.find(filter);
+
+    return res.status(200).render('searchResult', {
+      title: 'Search',
+      user,
+      articles,
+    });
+  } catch (err) {
+    console.error(err);
     return res.status(500).render('404', {
       title: 'Error',
       message: 'Something went wrong',

@@ -29,6 +29,8 @@ router.use(authController.isLoggedIn);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////               USER                 ///////////////////////////////////
 
+router.get('/articles/search', viewsController.searchResult);
+
 router.get('/error', viewsController.error);
 
 router.get('/', viewsController.home);
@@ -41,9 +43,11 @@ router.get('/submission-guidelines', viewsController.submissionGuidelines);
 
 router.get('/journal-issues', viewsController.issues);
 
-router.get('/journal-issues/:vol-slug', viewsController.issue);
+router.get('/journal-issues/:journalId', viewsController.issue);
 
-router.get('/journal-issues/:vol-slug/:slug', viewsController.article);
+router.get('/journal-issues/:journalId/:slug', viewsController.article);
+
+router.get('/journal-issue/:slug', viewsController.article2);
 
 router.get('/contact-us', viewsController.contact);
 

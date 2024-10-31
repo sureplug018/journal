@@ -288,6 +288,28 @@ const addEvent = async (title, details) => {
   }
 };
 
+const submitArticle = async (formData) => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/articles/submit-article',
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    if (res.data.status === 'success') {
+      showAlert('success', 'Article Submitted!');
+      window.setTimeout(() => {
+        location.reload();
+      }, 3000);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+    console.log(err);
+  }
+};
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -302,6 +324,7 @@ const updateAdminPasswordForm = document.querySelector('.admin-password-form');
 const logoutUserBtn = document.querySelector('.signOut-user-btn');
 const journalForm = document.querySelector('.add-journal-form');
 const eventForm = document.querySelector('.event-form');
+const submitArticleForm = document.querySelector('.submit-article-form');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -489,6 +512,29 @@ if (eventForm) {
 
     button.style.opacity = '1';
     button.textContent = 'Add Event';
+    button.disabled = false;
+  });
+}
+
+if (submitArticleForm) {
+  submitArticleForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const button = document.querySelector('.submit-article-btn');
+    button.style.opacity = '0.5';
+    button.textContent = 'Submitting...';
+    button.disabled = true;
+
+    const formData = new FormData();
+    formData.append('volume', document.getElementById('volume').value);
+    formData.append('title', document.getElementById('title').value);
+    formData.append('pageNumber', document.getElementById('pageNumber').value);
+    formData.append('abstract', document.getElementById('abstract').value);
+    formData.append('article', document.getElementById('article').files[0]);
+    formData.append('authors', document.getElementById('authors').value);
+
+    await submitArticle(formData);
+    button.style.opacity = '1';
+    button.textContent = 'Submit Article';
     button.disabled = false;
   });
 }
@@ -931,6 +977,296 @@ if (deleteArticleBtn) {
       deleteArticleBtn.style.opacity = '1';
       deleteArticleBtn.disabled = false;
       deleteArticleBtn.textContent = 'Delete Article';
+    }
+  });
+}
+
+/////////////////////////           SUPPORT            ///////////////////////////////////
+const replySupportModal = document.querySelectorAll('.reply-support-modal');
+const replySupportBtn = document.querySelector('.reply-support-btn');
+const sendMailModal = document.querySelectorAll('.send-mail-modal');
+const sendMailBtn = document.querySelector('.send-mail-btn');
+
+let currentUserId = null;
+let supportId = null;
+
+replySupportModal.forEach((button) => {
+  button.addEventListener('click', function () {
+    supportId = this.dataset.supportId;
+  });
+});
+
+sendMailModal.forEach((button) => {
+  button.addEventListener('click', function () {
+    currentUserId = this.dataset.userId;
+  });
+});
+
+if (replySupportBtn) {
+  replySupportBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    if (!currentUserId) return;
+
+    replySupportBtn.style.opacity = '0.5';
+    replySupportBtn.textContent = 'Sending Reply...';
+    replySupportBtn.disabled = true;
+
+    const info = {
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value,
+    };
+
+    try {
+      const res = await axios.post(
+        `/api/v1/supports/reply-support/${supportId}`,
+        info,
+      );
+
+      if (res.data.status === 'success') {
+        showAlert('success', 'Message Sent!');
+
+        window.setTimeout(() => {
+          location.reload();
+        }, 3000);
+      }
+    } catch (err) {
+      showAlert(
+        'error',
+        err.response ? err.response.data.message : 'Error sending message',
+      );
+    } finally {
+      replySupportBtn.style.opacity = '1';
+      replySupportBtn.disabled = false;
+      replySupportBtn.textContent = 'Send Mail';
+    }
+  });
+}
+
+if (sendMailBtn) {
+  sendMailBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    if (!currentUserId) return;
+
+    sendMailBtn.style.opacity = '0.5';
+    sendMailBtn.textContent = 'Sending Reply...';
+    sendMailBtn.disabled = true;
+
+    const info = {
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value,
+    };
+
+    try {
+      const res = await axios.post(
+        `/api/v1/supports/send-mail/${currentUserId}`,
+        info,
+      );
+
+      if (res.data.status === 'success') {
+        showAlert('success', 'Message Sent!');
+
+        window.setTimeout(() => {
+          location.reload();
+        }, 3000);
+      }
+    } catch (err) {
+      showAlert(
+        'error',
+        err.response ? err.response.data.message : 'Error sending message',
+      );
+    } finally {
+      sendMailBtn.style.opacity = '1';
+      sendMailBtn.disabled = false;
+      sendMailBtn.textContent = 'Send Mail';
+    }
+  });
+}
+
+///////////////////////        SUBMISSIONS           ////////////////////////////////
+const deleteSubmissionModal = document.querySelectorAll(
+  '.delete-submission-modal',
+);
+const deleteSubmissionBtn = document.querySelector('.delete-submission-btn');
+
+let submissionId = null;
+
+deleteSubmissionModal.forEach((button) => {
+  button.addEventListener('click', function () {
+    submissionId = this.dataset.submissionId;
+  });
+});
+
+if (deleteSubmissionBtn) {
+  deleteSubmissionBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    deleteSubmissionBtn.style.opacity = '0.5';
+    deleteSubmissionBtn.textContent = 'Deleting...';
+    deleteSubmissionBtn.disabled = true;
+
+    try {
+      const res = await axios.delete(
+        `/api/v1/articles/delete-submission/${submissionId}`,
+      );
+
+      if (res.data.status === 'success') {
+        showAlert('success', 'Success!');
+        window.setTimeout(() => {
+          location.reload();
+        }, 3000);
+      }
+    } catch (err) {
+      console.log(err);
+      showAlert('error', err.response.data.message);
+    } finally {
+      deleteSubmissionBtn.style.opacity = '1';
+      deleteSubmissionBtn.textContent = 'Delete';
+      deleteSubmissionBtn.disabled = false;
+    }
+  });
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////       search Functions    ///////////////////////////////////////////////////////////////
+
+// Find suggestions on input event
+const searchInputField = document.querySelectorAll('.suggestions');
+
+if (searchInputField) {
+  searchInputField.forEach((input) => {
+    input.addEventListener('input', async function (e) {
+      e.preventDefault();
+      const query = input.value;
+
+      if (query.length > 0) {
+        const suggestions = document.querySelectorAll('.list-of-suggestions');
+        suggestions.forEach((input) => {
+          input.style.display = 'block';
+        });
+
+        // Make sure there is something to search for
+        try {
+          // Correctly format the query parameter with '='
+          const res = await fetch(
+            `/api/v1/articles/find-article?name=${encodeURIComponent(query)}`,
+          );
+
+          // Check if the response is okay (status 200-299)
+          if (res.ok) {
+            const data = await res.json();
+
+            console.log(data);
+
+            const suggestions = document.querySelectorAll(
+              '.list-of-suggestions',
+            );
+
+            suggestions.forEach((input) => {
+              input.innerHTML = '';
+              data.data.articles.forEach((article) => {
+                const li = document.createElement('li');
+                // Set inline styles
+                li.style.padding = '5px'; // Add some padding
+                li.style.backgroundColor = '#fff'; // Light background color
+                li.style.cursor = 'pointer'; // Change cursor to pointer
+                li.style.transition = 'background-color 0.3s'; // Transition for hover effect
+                li.style.display = 'block';
+                li.style.width = '100%';
+                li.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
+
+                // Add hover effect using mouse events
+                li.addEventListener('mouseover', () => {
+                  li.style.backgroundColor = '#e0e0e0'; // Darker on hover
+                });
+
+                li.addEventListener('mouseout', () => {
+                  li.style.backgroundColor = '#f9f9f9'; // Revert on mouse out
+                });
+
+                li.textContent = article.title;
+                input.appendChild(li);
+
+                // Define a custom slugify function
+                function slugify(text) {
+                  return text
+                    .toString()
+                    .toLowerCase()
+                    .trim()
+                    .replace(/\s+/g, '-') // Replace spaces with -
+                    .replace(/[^\w\-\.]+/g, '') // Remove all non-word chars except dot
+                    .replace(/\-\-+/g, '-'); // Replace multiple - with single -
+                }
+
+                // Apply slugify to the list item's textContent
+                li.addEventListener('click', () => {
+                  const slug = slugify(li.textContent);
+                  window.location.href = `/articles/search?search=${slug}`; // Redirect to the product link with slug
+                });
+              });
+            });
+
+            // You can call a function to display suggestions here
+            // displaySuggestions(data);
+          } else {
+            console.error('Error fetching suggestions:', res.statusText);
+          }
+        } catch (err) {
+          console.error('Fetch error:', err);
+        }
+      } else {
+        // Optionally clear suggestions if input is empty
+        const suggestions = document.querySelectorAll('.list-of-suggestions');
+        suggestions.forEach((input) => {
+          input.style.display = 'none';
+        });
+      }
+    });
+  });
+}
+
+const searchBtn = document.querySelectorAll('.search-btn');
+const searchInputs = document.querySelectorAll('.suggestions');
+
+if (searchBtn && searchInputs) {
+  // Handle search button clicks
+  searchBtn.forEach((button) => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      handleSearch();
+    });
+  });
+
+  // Handle pressing the 'Enter' key in the search input
+  searchInputs.forEach((input) => {
+    input.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter' && input.value.trim().length > 0) {
+        e.preventDefault();
+        handleSearch();
+      }
+    });
+  });
+}
+
+// Search handling logic
+function handleSearch() {
+  searchInputs.forEach((input) => {
+    const query = input.value.trim();
+    if (query.length > 0) {
+      // Define a custom slugify function
+      function slugify(text) {
+        return text
+          .toString()
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, '-') // Replace spaces with -
+          .replace(/[^\w\-\.]+/g, '') // Remove all non-word chars except dot
+          .replace(/\-\-+/g, '-'); // Replace multiple - with single -
+      }
+
+      const slug = slugify(query);
+      window.location.href = `/articles/search?search=${slug}`; // Redirect to the product link with slug
     }
   });
 }

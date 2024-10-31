@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const authorSchema = new mongoose.Schema({
   firstName: {
@@ -46,11 +47,22 @@ const articleSchema = new mongoose.Schema(
       enum: ['Under review', 'Accept Article', 'Approved', 'Declined'],
       default: 'Accept Article',
     },
+    slug: String,
   },
   {
     timestamps: true,
   },
 );
+
+// Document middleware
+articleSchema.pre('save', function (next) {
+  // Create a lowercase version of the name for slug generation
+  const lowercaseName = this.title.toLowerCase();
+
+  // Generate the slug using the lowercase name
+  this.slug = slugify(lowercaseName);
+  next();
+});
 
 const Article = mongoose.model('Article', articleSchema);
 

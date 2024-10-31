@@ -17,7 +17,7 @@ router
   );
 
 router
-  .route('/reply/:supportId')
+  .route('/reply-support/:supportId')
   .post(
     authController.protect,
     authController.restrictTo('admin'),
@@ -25,11 +25,11 @@ router
   );
 
 router
-  .route('/sendMail/user')
+  .route('/send-mail/:id')
   .post(
     authController.protect,
     authController.restrictTo('admin'),
-    supportController.forwardAnEmail,
+    supportController.sendMail,
   );
 
 module.exports = router;

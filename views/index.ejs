@@ -28,6 +28,37 @@
   <link rel="stylesheet" href="/css/responsive.css">
   <script src="/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
   <script src="https://kit.fontawesome.com/fe5872a91f.js" crossorigin="anonymous"></script>
+
+  <style>
+    .sj-frontcover {
+      position: relative;
+      width: fit-content;
+      margin: 20px;
+      /* Adjust as needed */
+    }
+
+    .sj-frontcover img {
+      display: block;
+      width: 100%;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 1);
+      /* Creates box shadow */
+    }
+
+    .sj-frontcover::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 20px;
+      /* Adjust the width as needed for depth effect */
+      background: linear-gradient(to right, transparent, rgba(0, 0, 0, 1));
+      /* Volume effect */
+      pointer-events: none;
+    }
+  </style>
+
+
 </head>
 
 <body class="sj-home">
@@ -64,12 +95,12 @@
           <div class="row">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
               <div class="sj-topbar">
-                <ul class="sj-socialicons sj-socialiconssimple">
+                <!-- <ul class="sj-socialicons sj-socialiconssimple">
                   <li class="sj-facebook"><a href="javascript:void(0);"><i class="fa fa-facebook-f"></i></a></li>
                   <li class="sj-twitter"><a href="javascript:void(0);"><i class="fab fa-twitter"></i></a></li>
                   <li class="sj-linkedin"><a href="javascript:void(0);"><i class="fab fa-linkedin-in"></i></a></li>
                   <li class="sj-googleplus"><a href="javascript:void(0);"><i class="fab fa-google-plus-g"></i></a></li>
-                </ul>
+                </ul> -->
                 <div class="sj-languagelogin">
                   <% if(!user){ %>
                   <div class="sj-loginarea">
@@ -93,7 +124,7 @@
                 </div>
               </div>
               <div class="sj-navigationarea">
-                <strong class="sj-logo"><a href="index.html"><img src="/images/logo.png" alt="company logo here"></a></strong>
+                <strong class="sj-logo"><a href="/"><img src="/images/logo.jpeg" style="width: 250px; height: auto;" alt="company logo here"></a></strong>
                 <div class="sj-rightarea">
                   <nav id="sj-nav" class="sj-nav navbar-expand-lg">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -149,7 +180,7 @@
                 <figure class="sj-featureimg">
                   <!-- <a class="sj-btnvideo" href="javascript:void(0);"><i class="lnr lnr-film-play"></i><span>Watch Video Documentary</span></a> -->
                   <div class="sj-bookimg">
-                    <div class="sj-frontcover"><img src="images/slider/fronimg.png" alt="image description"></div>
+                    <div class="sj-frontcover"><img src="images/slider/fronimg.jpeg" alt="image description"></div>
                   </div>
                 </figure>
               </div>
@@ -158,7 +189,7 @@
               <div class="sj-bannercontent">
                 <h1><span>We Welcome Latest</span>Research Articles in<span>Field of Science</span></h1>
                 <div class="sj-description">
-                  <p>Consectetur adipisicing elit sedaui sedaui labore quis nostrud exercitation... <a href="javascript:void(0);">Read more</a></p>
+                  <p>The Flagship is a praxis-oriented journal that seeks to bridge the gap between research and practice... <a href="/about-us">Read more</a></p>
                 </div>
               </div>
             </div>
@@ -193,12 +224,12 @@
               <div class="col-12 col-sm-12 col-md-3 col-lg-3 sj-verticalmiddle">
                 <div style="margin-top: 15px; height: 120px; width: 100%; background-color: white; border-color: #666; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); display: flex; justify-content: center;">
                   <div class="row" style="margin-top: 20px;">
-                    <div class="col-3">
+                    <div class="col-2">
                       <i class="fa-solid fa-book-open" style="color: #7d5959; font-size: 40px;"></i>
                     </div>
-                    <div class="col-9">
+                    <div class="col-10">
                       <p style="font-weight: bolder;">Submit Article</p>
-                      Submit article to <br> <a href="mailto:editor@theflagshipjournal">editor@theflagshipjournal</a>
+                      Submit article to <br> <a href="mailto:editor@theflagshipjournal.org">editor@theflagshipjournal.org</a>
                     </div>
                   </div>
                 </div>
@@ -250,20 +281,39 @@
                     </div>
                     <div id="sj-editorchoiceslider" class="sj-editorchoiceslider sj-editorschoice owl-carousel">
                       <div class="item">
+                        <% if(!currentIssue){ %>
+                        <div style="height: 30px;"></div>
+                        <h3 style="text-align: center;">No Issue found!</h3>
+                        <% }else{ %>
                         <article class="sj-post sj-editorchoice">
                           <div class="sj-postcontent">
-                            <h4 style="font-weight: bold;">Vol.6 (2023): AHYU: A JOURNAL OF LANGUAGE AND LITERATURE</h4>
+                            <h4 style="font-weight: bold;">Vol. <%= currentIssue.volume %>, No. <%= currentIssue.number %> The Flagship Journal</h4>
+                            <% const timeStamp = currentIssue.createdAt %>
+                            <% const date = timeStamp.toLocaleDateString() %>
+                            <p>Published: <%= date %></p>
                             <p style="font-weight: bold;"></p>
+                            <% if(articles.length === 0){ %>
+                            <h3 style="text-align: center;">No article found yet!</h3>
+                            <% }else{ %>
+                            <% articles.forEach(function(article){ %>
+                            <span class="sj-username"><a style="cursor: pointer;"><% article.authors.forEach(function(author){ %>
+                                <%= author.firstName %> <%= author.lastName %>,
+                                <% }) %> </a></span>
                             <div class="sj-head">
-                              <span class="sj-username"><a href="javascript:void(0);">Hillary Farnham</a></span>
-                              <h3><a href="javascript:void(0);">Toward Better-Quality Compounded Drugs — An Update form</a></h3>
+                              <h3><a href="/journal-issues/<%= currentIssue.id %>/<%= article.slug %>"><%= article.title %></a></h3>
                             </div>
-                            <div class="sj-description">
+                            <!-- <div class="sj-description">
                               <p>Consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco...</p>
-                            </div>
-                            <a class="sj-btn" href="" style="background-color: #6E3F29; text-decoration: none;"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
+                            </div> -->
+                            <a class="sj-btn" href="<%= article.article %>" style="background-color: #6E3F29; text-decoration: none;"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
+
+                            <% }) %>
+
+                            <% } %>
                           </div>
                         </article>
+                        <% } %>
+
                       </div>
                     </div>
                   </section>
@@ -291,18 +341,18 @@
               <div class="col-12 col-sm-6 col-md-6 col-lg-3 float-left">
                 <div class="sj-fcol sj-footeraboutus">
                   <strong class="sj-logo">
-                    <a href="index.html"><img src="/images/logo.png" alt="image description"></a>
+                    <a href="/"><img src="/images/logo.jpeg" alt="image description"></a>
                   </strong>
                   <div class="sj-description">
-                    <p>Eiusmod tempor incididunt ut labore etai dolore magna aliqua enim nostrud exercitation... <a href="javascript:void(0);">Read More</a></p>
+                    <p>The Flagship is a praxis-oriented journal that seeks to bridge the gap between research and practice... <a href="/about-us">Read More</a></p>
                   </div>
-                  <ul class="sj-socialicons sj-socialiconssimple">
-                    <li class="sj-facebook"><a href="javascript:void(0);"><i class="fab fa-facebook-f"></i></a></li>
-                    <li class="sj-twitter"><a href="javascript:void(0);"><i class="fab fa-twitter"></i></a></li>
-                    <li class="sj-linkedin"><a href="javascript:void(0);"><i class="fab fa-linkedin-in"></i></a></li>
-                    <li class="sj-googleplus"><a href="javascript:void(0);"><i class="fab fa-google-plus-g"></i></a></li>
-                    <li class="sj-rss"><a href="javascript:void(0);"><i class="fa fa-rss"></i></a></li>
-                  </ul>
+                  <!-- <ul class="sj-socialicons sj-socialiconssimple">
+              <li class="sj-facebook"><a href="javascript:void(0);"><i class="fab fa-facebook-f"></i></a></li>
+              <li class="sj-twitter"><a href="javascript:void(0);"><i class="fab fa-twitter"></i></a></li>
+              <li class="sj-linkedin"><a href="javascript:void(0);"><i class="fab fa-linkedin-in"></i></a></li>
+              <li class="sj-googleplus"><a href="javascript:void(0);"><i class="fab fa-google-plus-g"></i></a></li>
+              <li class="sj-rss"><a href="javascript:void(0);"><i class="fa fa-rss"></i></a></li>
+            </ul> -->
                 </div>
               </div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-3 float-left">
@@ -312,11 +362,9 @@
                   </div>
                   <div class="sj-widgetcontent">
                     <ul>
-                      <li><a href="javascript:void(0);">Contact Us</a></li>
-                      <li><a href="javascript:void(0);">Careers @ Amentojourn</a></li>
-                      <li><a href="javascript:void(0);">Get Help and Support</a></li>
-                      <li><a href="javascript:void(0);">Rights &amp; Permissions</a></li>
-                      <li class="sj-more"><a href="javascript:void(0);">more</a></li>
+                      <li><a href="/contact-us">Contact Us</a></li>
+                      <li><a href="/journal-issues">Journal Issues</a></li>
+                      <li><a href="/submission-guidelines">Submission Guidelines</a></li>
                     </ul>
                   </div>
                 </div>
@@ -328,11 +376,10 @@
                   </div>
                   <div class="sj-widgetcontent">
                     <ul>
-                      <li><a href="javascript:void(0);">Authors</a></li>
-                      <li><a href="javascript:void(0);">Librarians</a></li>
-                      <li><a href="javascript:void(0);">Sponsors &amp; Advertisers</a></li>
-                      <li><a href="javascript:void(0);">Press &amp; Media</a></li>
-                      <li class="sj-more"><a href="javascript:void(0);">more</a></li>
+                      <li><a href="/">Home</a></li>
+                      <li><a href="/about-us">About</a></li>
+                      <li><a href="/editorial-team">Editorial Team</a></li>
+                      <li><a href="/events">Events</a></li>
                     </ul>
                   </div>
                 </div>
@@ -344,37 +391,37 @@
                   </div>
                   <div class="sj-widgetcontent">
                     <ul>
-                      <li><i class="lnr lnr-home"></i>
-                        <address>123 Office St, ABC Building, Melbourne, Australia. </address>
-                      </li>
-                      <li><a href="tel:(+4)123456789101"><i class="lnr lnr-phone"></i><span>(+4) 1234 5678 9101</span></a></li>
-                      <li><a href="tel:(+4)123456789101"><i class="lnr lnr-screen"></i><span>(+4) 4321 8765 1019</span></a></li>
-                      <li><a href="mailto:info@yourdomain.com"><i class="lnr lnr-envelope"></i><span>info@yourdomain.com</span></a></li>
+                      <!-- <li><i class="lnr lnr-home"></i>
+                  <address>123 Office St, ABC Building, Melbourne, Australia. </address>
+                </li> -->
+                      <li><a href="tel:+2348030958707"><i class="lnr lnr-phone"></i><span>+234(0)8030958707</span></a></li>
+                      <li><a href="tel:+2348037849366"><i class="lnr lnr-phone"></i><span>+234(0)8037849366</span></a></li>
+                      <li><a href="mailto:editor@theflagshipjournal.org"><i class="lnr lnr-envelope"></i><span>editor@theflagshipjournal.org</span></a></li>
                     </ul>
                   </div>
                 </div>
               </div>
             </div>
             <div class="sj-footerbottom">
-              <p class="sj-copyrights">© 2019 <span>Amentojourn</span>. All Rights Reserved</p>
+              <p class="sj-copyrights">© 2024 <span>The Flagship Journal</span>. All Rights Reserved</p>
             </div>
           </div>
         </div>
       </footer>
       <!--************************************
-                                        Footer End
-                                *************************************-->
+                                  Footer End
+                          *************************************-->
     </div>
     <!--************************************
-                                    Content Wrapper End
-                            *************************************-->
+                              Content Wrapper End
+                      *************************************-->
   </div>
   <!--************************************
-                                Wrapper End
-                        *************************************-->
+                          Wrapper End
+                  *************************************-->
   <!--************************************
-                                Search Start
-                        *************************************-->
+                          Search Start
+                  *************************************-->
   <div id="sj-searcharea" class="sj-searcharea">
     <button type="button" class="close">×</button>
     <form class="sj-formtheme sj-formsearcmain">
@@ -383,8 +430,8 @@
     </form>
   </div>
   <!--************************************
-                                Search End
-                        *************************************-->
+                          Search End
+                  *************************************-->
   <script src="/js/vendor/jquery-3.3.1.js"></script>
   <script src="/js/vendor/jquery-library.js"></script>
   <script src="/js/vendor/bootstrap.min.js"></script>

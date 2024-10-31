@@ -1,35 +1,36 @@
 const mongoose = require('mongoose');
 
-const journalSchema = new mongoose.Schema(
+const submissionSchema = new mongoose.Schema(
   {
     volume: {
       type: String,
       required: true,
     },
-    number: {
+    title: {
       type: String,
       required: true,
     },
-    month: {
+    authors: {
       type: String,
       required: true,
     },
-    year: {
+    abstract: {
       type: String,
       required: true,
     },
-    imageCover: {
+    pageNumber: {
       type: String,
       required: true,
     },
-    journal: {
+    article: {
       type: String,
       required: true,
     },
-    articleNumber: {
-      type: Number,
+    status: {
+      type: String,
       required: true,
-      default: 0,
+      enum: ['Under review', 'Approved', 'Declined'],
+      default: 'Under review',
     },
   },
   {
@@ -37,6 +38,6 @@ const journalSchema = new mongoose.Schema(
   },
 );
 
-const Journal = mongoose.model('Journal', journalSchema);
+const Submission = mongoose.model('Submission', submissionSchema);
 
-module.exports = Journal;
+module.exports = Submission;

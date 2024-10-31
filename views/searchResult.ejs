@@ -30,35 +30,21 @@
         <div class="col-12 col-sm-12 col-md-8 col-lg-9">
           <section class="sj-haslayout sj-sectioninnerspace">
             <div class="sj-borderheading">
-              <h3>Journal Issue</h3>
+              <h3>Articles</h3>
             </div>
             <div id="sj-editorchoiceslider" class="sj-editorchoiceslider sj-editorschoice owl-carousel">
-              <div class="item">
-                <% if(journals.length === 0){ %>
-                  <div style="height: 30px;"></div>
-                <h3 style="text-align: center;">No journal found!</h3>
-                <% }else{ %>
-                <% journals.forEach(function(journal){ %>
-                <article class="sj-post sj-editorchoice">
-                  <a href="/journal-issues/<%= journal.id %>">
-                    <figure class="sj-postimg">
-                      <img src="<%= journal.imageCover %>" alt="image description">
-                    </figure>
-                  </a>
-                  <div class="sj-postcontent">
-                    <!-- <div class="sj-head">
-								            <h3><a href="javascript:void(0);">A Milestone for CART Cells &amp; Treatment</a></h3>
-								          </div> -->
-                    <% const timeStamp = journal.createdAt %>
-                    <% const date = timeStamp.toLocaleDateString() %>
-                    <div class="sj-description">
-                      <p>Vol. <%= journal.volume %> <span style="margin-right: 10px;"></span> No. <%= journal.number %> <span style="margin-right: 10px;"></span> <%= journal.month %>, <%= journal.year %>
-                        <span style="margin-right: 10px;"></span>Published: <%= date %>
-                      </p>
-                    </div>
-                    <!-- <a class="sj-btn" href="javascript:void(0);"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a> -->
-                  </div>
-                </article>
+              <div class="item" style="margin-bottom: 120px;">
+                <% if(articles.length === 0){ %>
+                <h3 style="text-align: center;">No article found!</h3>
+                <%  }else{ %>
+                <% articles.forEach(function(article){ %>
+                <h4 style="font-weight: bold; margin-top: 30px;"><a href="/journal-issue/<%= article.slug %>"><%= article.title %></a></h4>
+                <p>
+                  <% const authors = article.authors.forEach(function(author){ %>
+                  <%= author.firstName %> <%= author.lastName %>,
+                  <% }) %>
+                </p>
+                <a class="sj-btn" href="<%= article.article %>"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
                 <% }) %>
                 <% } %>
 

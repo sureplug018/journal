@@ -54,7 +54,7 @@
                       <td><%= user.lastName %></td>
                       <td><%= user.email %></td>
                       <td><%= user.phoneNumber %></td>
-                      <td><a href="javascript:void(0);" data-user-id="<%= user.id %>" data-toggle="modal" data-target="#feedbackmodal" class="sj-pencilbtn"><i class="lnr lnr-envelope"></i></a></td>
+                      <td><a style="cursor: pointer;" data-user-id="<%= user.id %>" data-toggle="modal" data-target="#feedbackmodal" class="sj-pencilbtn send-mail-modal"><i class="lnr lnr-envelope"></i></a></td>
                     </tr>
                     <% }) %>
                   </tbody>
@@ -97,17 +97,17 @@
           <form class="sj-formtheme">
             <fieldset>
               <div class="form-group sj-inputwithicon sj-password">
-                <input type="text" class="form-control" placeholder="Subject">
+                <input type="text" class="form-control" id="subject" placeholder="Subject">
               </div>
               <div class="form-group sj-inputwithicon sj-password">
-                <textarea name="" class="form-control" id="" placeholder="Message"></textarea>
+                <textarea name="" class="form-control" id="message" placeholder="Message"></textarea>
               </div>
             </fieldset>
           </form>
         </div>
         <div class="sj-btnarea sj-updatebtns">
-          <a href="javascript:void(0);" class="sj-btn sj-btnactive">Send Mail</a>
-          <a href="javascript:void(0);" class="sj-btncancel" data-dismiss="modal" aria-label="Close">Cancel</a>
+          <a style="cursor: pointer; color: white;" class="sj-btn sj-btnactive send-mail-btn">Send Mail</a>
+          <a style="cursor: pointer;" class="sj-btncancel" data-dismiss="modal" aria-label="Close">Cancel</a>
         </div>
       </div>
     </div>

@@ -34,50 +34,42 @@
               <h2>Articles Under Review</h2>
             </div>
             <div style="height: 100px;"></div>
+            <% if(submissions.length === 0){ %>
+            <h3 style="text-align: center;">No submission found</h3>
+            <% }else{ %>
             <div class="table-responsive">
               <table class="table table-striped table-hover" style="min-width: 1300px;">
                 <thead>
                   <tr>
                     <th>S/N</th>
+                    <th>Issue</th>
                     <th>Title</th>
                     <th>Page</th>
-                    <th>No. of Authors</th>
                     <th>Date</th>
                     <th>Details</th>
-                    <th>action</th>
+                    <th>Delete</th>
                   </tr>
                 </thead>
                 <tbody>
+                  <% submissions.forEach(function(submission, i){  %>
                   <tr>
-                    <th scope="row">1</th>
-                    <td>MCLAUGHLIN'S ATTENTION PROCESSING MODEL IN TEACHING READING SKILLAND ITS IMPLICATION FOR LANGUAGE PEDAGOGY</td>
-                    <td>1-11</td>
-                    <td>3</td>
-                    <td>10/12/2024</td>
-                    <td><a href="/article-details/articleId">View Details</a></td>
-                    <td><a href="javascript:void(0);" data-toggle="modal" data-target="#feedbackmodal" class="sj-pencilbtn"><i class="ti-pencil"></i></a></td>
+                    <th scope="row"><%= i + 1 %></th>
+                    <td><%= submission.volume %></td>
+                    <td><%= submission.title %></td>
+                    <td><%= submission.pageNumber %></td>
+                    <% const timeStamp = submission.createdAt %>
+                    <% const date = timeStamp.toLocaleDateString() %>
+                    <% const time = timeStamp.toLocaleTimeString() %>
+                    <td><%= date %> (<%= time %>)</td>
+                    <td><a href="/article-details/<%= submission.id %>">View Details</a></td>
+                    <td><a style="cursor: pointer;" data-submission-id="<%= submission.id %>" data-toggle="modal" data-target="#feedbackmodal" class="sj-pencilbtn delete-submission-modal"><i class="ti-trash"></i></a></td>
                   </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>MCLAUGHLIN'S ATTENTION PROCESSING MODEL IN TEACHING READING SKILLAND ITS IMPLICATION FOR LANGUAGE PEDAGOGY</td>
-                    <td>1-11</td>
-                    <td>3</td>
-                    <td>10/12/2024</td>
-                    <td><a href="/article-details/articleId">View Details</a></td>
-                    <td><a href="javascript:void(0);" data-toggle="modal" data-target="#feedbackmodal" class="sj-pencilbtn"><i class="ti-pencil"></i></a></td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>MCLAUGHLIN'S ATTENTION PROCESSING MODEL IN TEACHING READING SKILLAND ITS IMPLICATION FOR LANGUAGE PEDAGOGY</td>
-                    <td>1-11</td>
-                    <td>3</td>
-                    <td>10/12/2024</td>
-                    <td><a href="/article-details/articleId">View Details</a></td>
-                    <td><a href="javascript:void(0);" data-toggle="modal" data-target="#feedbackmodal" class="sj-pencilbtn"><i class="ti-pencil"></i></a></td>
-                  </tr>
+                  <% }) %>
                 </tbody>
               </table>
             </div>
+            <% } %>
+
             <!-- <nav class="sj-pagination">
                     <ul>
                       <li class="sj-prevpage"><a href="aticle-list.html#"><i class="fa fa-angle-left"></i> Previous</a></li>
@@ -108,7 +100,7 @@
       </div>
       <div class="modal-body">
         <div class="sj-popupbtn">
-          <button type="button" class="sj-btn sj-btnactive">Accept Article</button>  <button type="button" class="sj-btn sj-btnactive">Reject Article</button>
+          <button class="sj-btn sj-btnactive delete-submission-btn">Delete</button> <button type="button" data-dismiss="modal" aria-label="Close" class="sj-btn sj-btnactive">Cancel</button>
         </div>
       </div>
     </div>

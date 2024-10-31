@@ -78,7 +78,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', function (next) {
   if (!this.isModified('password') || this.isNew) return next();
 
-  this.passwordChangedAt = Date.now() - 1000;
+  this.passswordChangedAt = Date.now() - 1000;
   next();
 });
 
@@ -102,9 +102,9 @@ userSchema.methods.correctPassword = async function (
 
 // comparing the timestamp date with the date of token generation when the timestamp is greater than when the token was generated
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
-  if (this.passwordChangedAt) {
+  if (this.passswordChangedAt) {
     const changedTimestamp = parseInt(
-      this.passwordChangedAt.getTime() / 1000,
+      this.passswordChangedAt.getTime() / 1000,
       10,
     );
     return JWTTimestamp < changedTimestamp;
