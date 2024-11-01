@@ -4,6 +4,8 @@ const Journal = require('../models/journalModel');
 const Event = require('../models/eventModel');
 const Article = require('../models/articleModel');
 const Submission = require('../models/submissionModel');
+const Editor = require('../models/editorModel');
+const Scope = require('../models/scopeModel');
 
 exports.login = async (req, res) => {
   try {
@@ -67,11 +69,14 @@ exports.home = async (req, res) => {
       ? await Article.find({ journal: currentIssue.id })
       : []; // Return an empty array if no journal is found
 
+    const scopeOfArticle = await Scope.findOne();
+
     return res.status(200).render('index', {
       title: 'Home',
       user,
       currentIssue,
       articles,
+      scopeOfArticle,
     });
   } catch (err) {
     console.log(err);
@@ -85,9 +90,11 @@ exports.home = async (req, res) => {
 exports.about = async (req, res) => {
   try {
     const user = res.locals.user;
+    const scopeOfArticle = await Scope.findOne();
     return res.status(200).render('about', {
       title: 'About',
       user,
+      scopeOfArticle,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -100,9 +107,23 @@ exports.about = async (req, res) => {
 exports.editorialTeam = async (req, res) => {
   try {
     const user = res.locals.user;
+    const scopeOfArticle = await Scope.findOne();
+    const chiefEditors = await Editor.find({ dept: 'Editor-In-Chief' });
+    const editorialSecretaries = await Editor.find({
+      dept: 'Editorial Secretary',
+    });
+    const editorialBoardMembers = await Editor.find({
+      dept: 'Editorial Board Members',
+    });
+    const editorialAdvisers = await Editor.find({ dept: 'Editorial Advisors' });
     return res.status(200).render('editorial', {
       title: 'Editorial Team',
       user,
+      scopeOfArticle,
+      chiefEditors,
+      editorialSecretaries,
+      editorialBoardMembers,
+      editorialAdvisers,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -116,9 +137,11 @@ exports.submissionGuidelines = async (req, res) => {
   try {
     const user = res.locals.user;
 
+    const scopeOfArticle = await Scope.findOne();
     return res.status(200).render('submissions', {
       title: 'Submission Guidelines',
       user,
+      scopeOfArticle,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -132,10 +155,12 @@ exports.issues = async (req, res) => {
   try {
     const user = res.locals.user;
     const journals = await Journal.find();
+    const scopeOfArticle = await Scope.findOne();
     return res.status(200).render('issues', {
       title: 'Journal Issues',
       user,
       journals,
+      scopeOfArticle,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -148,10 +173,11 @@ exports.issues = async (req, res) => {
 exports.contact = async (req, res) => {
   try {
     const user = res.locals.user;
-
+    const scopeOfArticle = await Scope.findOne();
     return res.status(200).render('contact', {
       title: 'Contact Us',
       user,
+      scopeOfArticle,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -242,9 +268,11 @@ exports.events = async (req, res) => {
   try {
     const user = res.locals.user;
     const events = await Event.find();
+    const scopeOfArticle = await Scope.findOne();
     return res.status(200).render('events', {
       title: 'Events',
       user,
+      scopeOfArticle,
       events,
     });
   } catch (err) {
@@ -478,12 +506,87 @@ exports.editAuthors = async (req, res) => {
   }
 };
 
+exports.scope = async (req, res) => {
+  try {
+    const user = res.locals.user;
+
+    if (!user) {
+      return res.status(302).redirect('/login');
+    }
+
+    if (user.role === 'admin') {
+      return res.status(200).render('add-scope', {
+        title: 'Scope',
+        user,
+      });
+    }
+
+    return res.status(302).redirect('/');
+  } catch (err) {
+    return res.status(500).render('404', {
+      title: 'Error',
+      message: 'Something went wrong',
+    });
+  }
+};
+
+exports.addEditor = async (req, res) => {
+  try {
+    const user = res.locals.user;
+
+    if (!user) {
+      return res.status(302).redirect('/login');
+    }
+
+    if (user.role === 'admin') {
+      return res.status(200).render('add-editor', {
+        title: 'Add Editor',
+        user,
+      });
+    }
+
+    return res.status(302).redirect('/');
+  } catch (err) {
+    return res.status(500).render('404', {
+      title: 'Error',
+      message: 'Something went wrong',
+    });
+  }
+};
+
+exports.editEditor = async (req, res) => {
+  try {
+    const user = res.locals.user;
+
+    if (!user) {
+      return res.status(302).redirect('/login');
+    }
+
+    if (user.role === 'admin') {
+      const editors = await Editor.find();
+      return res.status(200).render('editors-list', {
+        title: 'Add Editor',
+        user,
+        editors,
+      });
+    }
+
+    return res.status(302).redirect('/');
+  } catch (err) {
+    return res.status(500).render('404', {
+      title: 'Error',
+      message: 'Something went wrong',
+    });
+  }
+};
+
 exports.article = async (req, res) => {
   const { slug, journalId } = req.params;
   try {
     const user = res.locals.user;
     const article = await Article.findOne({ slug });
     const journal = await Journal.findById(journalId);
+    const scopeOfArticle = await Scope.findOne();
     if (!journal) {
       return res.status(302).redirect('404');
     }
@@ -497,6 +600,7 @@ exports.article = async (req, res) => {
       title: 'Article Details',
       user,
       article,
+      scopeOfArticle,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -511,6 +615,7 @@ exports.article2 = async (req, res) => {
   try {
     const user = res.locals.user;
     const article = await Article.findOne({ slug });
+    const scopeOfArticle = await Scope.findOne();
     if (!article) {
       return res.status(302).render('404', {
         title: 'Error',
@@ -521,6 +626,7 @@ exports.article2 = async (req, res) => {
       title: 'Article Details',
       user,
       article,
+      scopeOfArticle,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -535,6 +641,7 @@ exports.issue = async (req, res) => {
     const user = res.locals.user;
     const journalId = req.params.journalId;
     const journal = await Journal.findById(journalId);
+    const scopeOfArticle = await Scope.findOne();
     if (!journal) {
       return res.status(404).render('404', {
         title: 'Error',
@@ -547,6 +654,7 @@ exports.issue = async (req, res) => {
       user,
       journal,
       articles,
+      scopeOfArticle,
     });
   } catch (err) {
     return res.status(500).render('404', {
@@ -799,11 +907,13 @@ exports.searchResult = async (req, res) => {
 
     // Find articles based on the filter
     const articles = await Article.find(filter);
+    const scopeOfArticle = await Scope.findOne();
 
     return res.status(200).render('searchResult', {
       title: 'Search',
       user,
       articles,
+      scopeOfArticle,
     });
   } catch (err) {
     console.error(err);

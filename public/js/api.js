@@ -310,6 +310,52 @@ const submitArticle = async (formData) => {
   }
 };
 
+const addScope = async (scope) => {
+  try {
+    const res = await axios({
+      method: 'post',
+      url: '/api/v1/scopes/create-scope',
+      data: {
+        scope,
+      },
+    });
+
+    if (res.data.status === 'success') {
+      showAlert('success', 'Scope Updated!');
+      window.setTimeout(() => {
+        location.reload();
+      }, 3000);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+    console.log(err);
+  }
+};
+
+const addEditor = async (name, dept, levelOfEducation, occupation) => {
+  try {
+    const res = await axios({
+      method: 'post',
+      url: '/api/v1/editors/create-editor',
+      data: {
+        name,
+        dept,
+        levelOfEducation,
+        occupation,
+      },
+    });
+    if (res.data.status === 'success') {
+      showAlert('success', 'Editor Added!');
+      window.setTimeout(() => {
+        location.reload();
+      }, 3000);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+    console.log(err);
+  }
+};
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -325,6 +371,8 @@ const logoutUserBtn = document.querySelector('.signOut-user-btn');
 const journalForm = document.querySelector('.add-journal-form');
 const eventForm = document.querySelector('.event-form');
 const submitArticleForm = document.querySelector('.submit-article-form');
+const scopeForm = document.querySelector('.add-scope-form');
+const editorForm = document.querySelector('.add-editor-form');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -535,6 +583,39 @@ if (submitArticleForm) {
     await submitArticle(formData);
     button.style.opacity = '1';
     button.textContent = 'Submit Article';
+    button.disabled = false;
+  });
+}
+
+if (scopeForm) {
+  scopeForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const button = document.querySelector('.add-scope-btn');
+    button.style.opacity = '0.5';
+    button.textContent = 'Adding...';
+    button.disabled = true;
+    const scope = document.getElementById('scope').value;
+    await addScope(scope);
+    button.style.opacity = '1';
+    button.textContent = 'Add Scope';
+    button.disabled = false;
+  });
+}
+
+if (editorForm) {
+  editorForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const button = document.querySelector('.add-editor-btn');
+    button.style.opacity = '0.5';
+    button.textContent = 'Adding...';
+    button.disabled = true;
+    const name = document.getElementById('name').value;
+    const dept = document.getElementById('dept').value;
+    const levelOfEducation = document.getElementById('levelOfEducation').value;
+    const occupation = document.getElementById('occupation').value;
+    await addEditor(name, dept, levelOfEducation, occupation);
+    button.style.opacity = '1';
+    button.textContent = 'Add Editor';
     button.disabled = false;
   });
 }
@@ -1080,6 +1161,101 @@ if (sendMailBtn) {
       sendMailBtn.style.opacity = '1';
       sendMailBtn.disabled = false;
       sendMailBtn.textContent = 'Send Mail';
+    }
+  });
+}
+
+//////////////////////            EDITORS                 /////////////////////////////
+const editEditorModal = document.querySelectorAll('.edit-editor-modal');
+const editEditorBtn = document.querySelector('.edit-editor-btn');
+const deleteEditorModal = document.querySelectorAll('.delete-editor-modal');
+const deleteEditorBtn = document.querySelector('.delete-editor-btn');
+let currentEditorId = null;
+
+editEditorModal.forEach((button) => {
+  button.addEventListener('click', function () {
+    currentEditorId = this.dataset.editorId;
+  });
+});
+
+deleteEditorModal.forEach((button) => {
+  button.addEventListener('click', function () {
+    currentEditorId = this.dataset.editorId;
+  });
+});
+
+if (editEditorBtn) {
+  editEditorBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (!currentEditorId) return;
+
+    editEditorBtn.style.opacity = '0.5';
+    editEditorBtn.disabled = true;
+    editEditorBtn.textContent = 'Processing...';
+
+    const info = {
+      name: document.getElementById('name').value,
+      dept: document.getElementById('dept').value,
+      levelOfEducation: document.getElementById('levelOfEducation').value,
+      occupation: document.getElementById('occupation').value,
+    };
+
+    try {
+      const response = await axios.patch(
+        `/api/v1/editors/edit-editor/${currentEditorId}`,
+        info,
+      );
+
+      if (response.data.status === 'success') {
+        showAlert('success', 'Editor Updated!');
+        window.setTimeout(() => {
+          location.reload();
+        }, 3000);
+      }
+    } catch (err) {
+      showAlert(
+        'error',
+        err.response ? err.response.data.message : 'Error creating article',
+      );
+    } finally {
+      editEditorBtn.style.opacity = '1';
+      editEditorBtn.disabled = false;
+      editEditorBtn.textContent = 'Update Editor';
+    }
+  });
+}
+
+if (deleteEditorBtn) {
+  deleteEditorBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    if (!currentEditorId) return;
+
+    deleteEditorBtn.style.opacity = '0.5';
+    deleteEditorBtn.textContent = 'Deleting...';
+    deleteEditorBtn.disabled = true;
+
+    try {
+      const res = await axios.delete(
+        `/api/v1/editors/delete-editor/${currentEditorId}`,
+      );
+
+      if (res.data.status === 'success') {
+        showAlert('success', 'Editor deleted!');
+
+        window.setTimeout(() => {
+          location.reload();
+        }, 3000);
+      }
+    } catch (err) {
+      showAlert(
+        'error',
+        err.response ? err.response.data.message : 'Error deleting article',
+      );
+    } finally {
+      deleteEditorBtn.style.opacity = '1';
+      deleteEditorBtn.disabled = false;
+      deleteEditorBtn.textContent = 'Delete Editor';
     }
   });
 }

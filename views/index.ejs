@@ -296,6 +296,7 @@
                             <h3 style="text-align: center;">No article found yet!</h3>
                             <% }else{ %>
                             <% articles.forEach(function(article){ %>
+                            <div style="height: 30px;"></div>
                             <span class="sj-username"><a style="cursor: pointer;"><% article.authors.forEach(function(author){ %>
                                 <%= author.firstName %> <%= author.lastName %>,
                                 <% }) %> </a></span>
@@ -306,7 +307,6 @@
                               <p>Consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco...</p>
                             </div> -->
                             <a class="sj-btn" href="<%= article.article %>" style="background-color: #6E3F29; text-decoration: none;"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
-
                             <% }) %>
 
                             <% } %>

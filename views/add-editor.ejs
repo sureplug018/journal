@@ -1,0 +1,76 @@
+<%- include('partials/userDashboardHeader.ejs') %>
+<!--************************************
+					Inner Banner Start
+			*************************************-->
+<div class="sj-innerbanner">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="sj-innerbannercontent">
+          <h1>Add Editor</h1>
+          <ol class="sj-breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="javascript:void(0);">Editor</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--************************************
+					Inner Banner End
+			*************************************-->
+<!--************************************
+					Main Start
+			*************************************-->
+<main id="sj-main" class="sj-main sj-haslayout sj-sectionspace">
+  <div class="container">
+    <div class="row">
+      <div id="sj-twocolumns" class="sj-twocolumns">
+        <%- include('partials/dashboardNav.ejs') %>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-9 float-right">
+          <div id="sj-content" class="sj-content">
+            <div class="sj-addarticleholdcontent">
+              <div class="sj-dashboardboxtitle">
+                <h2>Add Editor</h2>
+              </div>
+              <div class="sj-acsettingthold">
+                <div style="padding: 30px 30px;">
+                  <form class="sj-formtheme add-editor-form" style="margin-bottom: 20px;">
+                    <fieldset>
+                      <div class="form-group sj-inputwithicon sj-password">
+                        <input type="text" id="name" class="form-control" placeholder="Full Name">
+                      </div>
+                      <div class="form-group sj-inputwithicon sj-password">
+                        <select class="form-control" id="dept">
+                          <option value="" disabled selected>Select Department</option>
+                          <option value="Editor-In-Chief">Editor-In-Chief</option>
+                          <option value="Editorial Secretary">Editorial Secretary</option>
+                          <option value="Editorial Board Members">Editorial Board Members</option>
+                          <option value="Editorial Advisors">Editorial Advisors</option>
+                        </select>
+                      </div>
+                      <div class="form-group sj-inputwithicon sj-password">
+                        <input type="text" id="levelOfEducation" class="form-control" placeholder="Level of Education (e.g Ph.D)">
+                      </div>
+                      <div class="form-group sj-inputwithicon sj-password">
+                        <input type="text" id="occupation" class="form-control" placeholder="Occupation or Office">
+                      </div>
+                      <div class="form-group sj-inputwithicon sj-password">
+                        <button class="sj-btn sj-btnactive add-editor-btn">Add Editor</button>
+                      </div>
+                    </fieldset>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<!--************************************
+					Main End
+			*************************************-->
+<%- include('partials/userDashboardFooter.ejs') %>

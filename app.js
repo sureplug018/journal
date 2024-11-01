@@ -9,6 +9,8 @@ const eventRoutes = require('./routes/eventRoutes');
 const journalRoutes = require('./routes/journalRoutes');
 const articleRoutes = require('./routes/articleRoutes');
 const viewsRoutes = require('./routes/viewsRoutes');
+const editorRoutes = require('./routes/editorRoutes');
+const scopeRoutes = require('./routes/scopeRoues');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -44,5 +46,7 @@ app.use('/api/v1/supports', supportRoutes);
 app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/journals', journalRoutes);
 app.use('/api/v1/articles', articleRoutes);
+app.use('/api/v1/editors', editorRoutes);
+app.use('/api/v1/scopes', scopeRoutes);
 
 module.exports = app;

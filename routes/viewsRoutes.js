@@ -86,4 +86,10 @@ router.get('/supports', viewsController.supports);
 
 router.get('/admin/dashboard', viewsController.adminDashboard);
 
+router.get('/scope', viewsController.scope);
+
+router.get('/add-editor', viewsController.addEditor);
+
+router.get('/editors', viewsController.editEditor);
+
 module.exports = router;
