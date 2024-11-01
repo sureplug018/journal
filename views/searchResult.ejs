@@ -44,7 +44,7 @@
                   <%= author.firstName %> <%= author.lastName %>,
                   <% }) %>
                 </p>
-                <a class="sj-btn" href="<%= article.article %>"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a>
+                <a class="sj-btn" href="<%= article.article %>"><i style="font-size: large;" class="fa fa-file-pdf"></i> PDF</a> <span style="float: right;"><%= article.pageNumber %></span>
                 <% }) %>
                 <% } %>
 
