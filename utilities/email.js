@@ -9,13 +9,13 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.firstName; // Corrected splitting method
     this.url = url;
-    this.from = '"Michael Enterprise" <support@michael-enterprise.com>';
+    this.from = '"The Flagship Journal" <editor@theflagshipjournal.org>';
   }
 
   newTransport() {
     if (process.env.NODE_ENV === 'production') {
       return nodemailer.createTransport({
-        host: 'mail.privateemail.com',
+        host: 'smtp.hostinger.com',
         port: 465,
         secure: true,
         auth: {
@@ -69,7 +69,7 @@ module.exports = class Email {
 
   async sendWelcome() {
     try {
-      await this.send('welcome', 'Welcome to Michael Enterprise'); // Ensure the template name matches
+      await this.send('welcome', 'Welcome to The Flagship Journal'); // Ensure the template name matches
     } catch (error) {
       // Handle error for sendWelcome method
       console.error('Sending welcome email failed:', error);

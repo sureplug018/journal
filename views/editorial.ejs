@@ -21,23 +21,40 @@
     <div class="container">
       <h4 style="font-weight: bold;">Editorial Team</h4>
       <div style="height: 20px;"></div>
+      <% if(chiefEditors.length === 0 && editorialSecretaries.length === 0 && editorialBoardMembers.length === 0 && editorialAdvisers.length === 0){ %>
+      <h5 style="text-align: center;">No editor found</h5>
+      <% }else{ %>
+
+      <% if(chiefEditors.length > 0){ %>
       <h5 style="text-decoration: underline;">Editor-in-chief</h5>
       <% chiefEditors.forEach(function(editor){ %>
       <p> <span style="font-weight: bold;"><%= editor.name %>, <%= editor.levelOfEducation %>, </span><%= editor.occupation %></p>
       <% }) %>
+      <% } %>
 
+      <% if(editorialSecretaries.length > 0){ %>
       <h5 style="text-decoration: underline;">Editorial Secretary</h5>
       <% editorialSecretaries.forEach(function(editor){ %>
       <p> <span style="font-weight: bold;"><%= editor.name %>, <%= editor.levelOfEducation %>, </span><%= editor.occupation %></p>
       <% }) %>
+      <% } %>
+
+      <% if(editorialBoardMembers.length > 0){ %>
       <h5 style="text-decoration: underline;">Editorial Board Members</h5>
       <% editorialBoardMembers.forEach(function(editor){ %>
       <p> <span style="font-weight: bold;"><%= editor.name %>, <%= editor.levelOfEducation %>, </span><%= editor.occupation %></p>
       <% }) %>
+      <% } %>
+
+      <% if(editorialAdvisers.length > 0){ %>
       <h5 style="text-decoration: underline;">Editorial Advisors</h5>
       <% editorialAdvisers.forEach(function(editor){ %>
       <p> <span style="font-weight: bold;"><%= editor.name %>, <%= editor.levelOfEducation %>, </span><%= editor.occupation %></p>
       <% }) %>
+      <% } %>
+
+      <% } %>
+
     </div>
   </div>
 </main>

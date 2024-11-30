@@ -304,7 +304,7 @@ exports.addJournal = async (req, res) => {
       return res.status(302).redirect('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       return res.status(200).render('add-journal', {
         title: 'Add Journal',
         user,
@@ -328,7 +328,7 @@ exports.addEvent = async (req, res) => {
       return res.status(302).redirect('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       return res.status(200).render('add-event', {
         title: 'Add Event',
         user,
@@ -352,7 +352,7 @@ exports.eventList = async (req, res) => {
       return res.status(302).redirect('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const events = await Event.find();
       return res.status(200).render('event-list', {
         title: 'Events',
@@ -378,7 +378,7 @@ exports.addArticle = async (req, res) => {
       return res.status(302).redirect('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       return res.status(200).render('add-article', {
         title: 'Add Article',
         user,
@@ -428,7 +428,7 @@ exports.underReview = async (req, res) => {
       return res.status(302).redirect('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const submissions = await Submission.find().sort({ createdAt: -1 });
       return res.status(200).render('underreview', {
         title: 'Under Review',
@@ -455,7 +455,7 @@ exports.underReviewDetail = async (req, res) => {
       return res.status(302).redirect('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const article = await Submission.findById(articleId);
       if (!article) {
         return (
@@ -490,7 +490,7 @@ exports.editAuthors = async (req, res) => {
       return res.status(302).redirect('/login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       return res.status(200).render('underReviewDetails', {
         title: 'Article Details',
         user,
@@ -514,7 +514,7 @@ exports.scope = async (req, res) => {
       return res.status(302).redirect('/login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       return res.status(200).render('add-scope', {
         title: 'Scope',
         user,
@@ -538,7 +538,7 @@ exports.addEditor = async (req, res) => {
       return res.status(302).redirect('/login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       return res.status(200).render('add-editor', {
         title: 'Add Editor',
         user,
@@ -562,7 +562,7 @@ exports.editEditor = async (req, res) => {
       return res.status(302).redirect('/login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const editors = await Editor.find();
       return res.status(200).render('editors-list', {
         title: 'Add Editor',
@@ -672,7 +672,7 @@ exports.journalList = async (req, res) => {
       return res.status(302).status('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const journals = await Journal.find();
       return res.status(200).render('journal-list', {
         title: 'Journals',
@@ -698,7 +698,7 @@ exports.addJournal = async (req, res) => {
       return res.status(302).status('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       return res.status(200).render('add-journal', {
         title: 'Add Journal',
         user,
@@ -722,7 +722,7 @@ exports.users = async (req, res) => {
       return res.status(302).status('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const users = await User.find();
       return res.status(200).render('users', {
         title: 'Users',
@@ -748,7 +748,7 @@ exports.supports = async (req, res) => {
       return res.status(302).status('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const supports = await Support.find();
       return res.status(200).render('supports', {
         title: 'Support Tickets',
@@ -798,7 +798,7 @@ exports.adminDashboard = async (req, res) => {
       return res.status(302).status('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const users = await User.find();
       const supports = await Support.find();
       const journals = await Journal.find();
@@ -833,7 +833,7 @@ exports.adminJournalDetails = async (req, res) => {
       return res.status(302).redirect('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const articles = await Article.find({ journal: journalId });
       return res.status(200).render('admin-journal-details', {
         title: 'Articles',
@@ -858,7 +858,7 @@ exports.articleDetailAdmin = async (req, res) => {
       return res.status(302).redirect('/admin-login');
     }
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'super-admin') {
       const article = await Article.findById(articleId);
       if (!article) {
         return (
@@ -915,6 +915,31 @@ exports.searchResult = async (req, res) => {
       articles,
       scopeOfArticle,
     });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).render('404', {
+      title: 'Error',
+      message: 'Something went wrong',
+    });
+  }
+};
+
+exports.editRole = async (req, res) => {
+  try {
+    const user = res.locals.user;
+
+    if (!user) {
+      return res.status(302).redirect('/admin-login');
+    }
+
+    if (user.role === 'super-admin') {
+      return res.status(200).render('edit-role', {
+        title: 'Manage User Role',
+        user,
+      });
+    }
+
+    return res.status(302).redirect('/');
   } catch (err) {
     console.error(err);
     return res.status(500).render('404', {

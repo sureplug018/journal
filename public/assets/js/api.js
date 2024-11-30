@@ -356,6 +356,27 @@ const addEditor = async (name, dept, levelOfEducation, occupation) => {
   }
 };
 
+const userRole = async (email, role) => {
+  try {
+    const res = await axios({
+      method: 'patch',
+      url: '/api/v1/users/change-role',
+      data: {
+        email,
+        role,
+      },
+    });
+    if (res.data.status === 'success') {
+      showAlert('success', 'User Role Updated!');
+      setTimeout(function () {
+        location.reload();
+      }, 3000);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -373,6 +394,7 @@ const eventForm = document.querySelector('.event-form');
 const submitArticleForm = document.querySelector('.submit-article-form');
 const scopeForm = document.querySelector('.add-scope-form');
 const editorForm = document.querySelector('.add-editor-form');
+const userRoleForm = document.querySelector('.user-role-form');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -387,6 +409,25 @@ if (loginForm) {
     await login(email, password);
     document.querySelector('.login-btn').style.opacity = '1';
     document.querySelector('.login-btn').textContent = 'Sign in';
+  });
+}
+
+if (userRoleForm) {
+  userRoleForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = document.querySelector('.update-btn');
+    submitBtn.style.opacity = '0.5';
+    submitBtn.textContent = 'Updating...';
+    submitBtn.disabled = true;
+
+    const email = document.getElementById('email').value;
+    const role = document.getElementById('role').value;
+
+    await userRole(email, role);
+
+    submitBtn.style.opacity = '1';
+    submitBtn.textContent = 'Update Role';
+    submitBtn.disabled = false;
   });
 }
 

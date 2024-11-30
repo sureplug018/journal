@@ -28,7 +28,7 @@
 }
 body {
   color: #636c77;
-  background: #fff url(../images/bodybg-01.png);
+  background: #fff url(/assets/images/bodybg-01.png);
   font:
     400 14px/23px 'Quicksand',
     Arial,
@@ -1100,7 +1100,7 @@ v .mega-menu-row {
   width: 100%;
   height: 4px;
   position: absolute;
-  background: url(../images/top-strip.jpg) no-repeat;
+  background: url(/assets/images/top-strip.jpg) no-repeat;
 }
 .sj-content,
 .sj-twocolumns {
@@ -1597,7 +1597,7 @@ body.sj-userlogin .sj-topbar .sj-languages {
   height: 97%;
   content: '';
   position: absolute;
-  background: url(../images/slider/bookpattren.png) no-repeat;
+  background: url(/assets/images/slider/bookpattren.png) no-repeat;
   -webkit-background-size: 100% 100%;
   -moz-background-size: 100% 100%;
   -ms-background-size: 100% 100%;
@@ -2391,7 +2391,7 @@ body.sj-userlogin .sj-topbar .sj-languages {
   line-height: 22px;
   text-align: center;
   position: absolute;
-  background: url(../images/btnscroll-bg.png) center center;
+  background: url(/assets/images/btnscroll-bg.png) center center;
 }
 .sj-btnscrolltotop i,
 .sj-btnscrolltotop:hover {
@@ -4483,7 +4483,7 @@ body.sj-userlogin .sj-topbar .sj-languages {
   width: 12px;
   display: block;
   position: absolute;
-  background: url(../images/users-img/img-01.png);
+  background: url(/assets/images/users-img/img-01.png);
 }
 .sj-userdropdownmanu li {
   width: 100%;
@@ -4794,27 +4794,27 @@ body.sj-userlogin .sj-topbar .sj-languages {
   border: 2px solid white;
 }
 .loader--dot:first-child {
-  background-color: #2eca80;
+  background-color: #6E3F29;
   animation-delay: 0.5s;
 }
 .loader--dot:nth-child(2) {
-  background-color: #0ca5e1;
+  background-color: #6E3F29;
   animation-delay: 0.4s;
 }
 .loader--dot:nth-child(3) {
-  background-color: #16a0de;
+  background-color: #6E3F29;
   animation-delay: 0.3s;
 }
 .loader--dot:nth-child(4) {
-  background-color: #7751e5;
+  background-color: #6E3F29;
   animation-delay: 0.2s;
 }
 .loader--dot:nth-child(5) {
-  background-color: #60beeb;
+  background-color: #6E3F29;
   animation-delay: 0.1s;
 }
 .loader--dot:nth-child(6) {
-  background-color: #fbef5a;
+  background-color: #6E3F29;
   animation-delay: 0s;
 }
 .loader--text {

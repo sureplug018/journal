@@ -38,8 +38,15 @@ router.patch(
 router.delete(
   '/deleteUser/:id',
   authController.protect,
-  authController.restrictTo('admin'), 
+  authController.restrictTo('admin'),
   authController.deleteUser,
+);
+
+router.patch(
+  '/change-role',
+  authController.protect,
+  authController.restrictTo('super-admin'),
+  userController.changeUserRole,
 );
 
 module.exports = router;

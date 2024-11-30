@@ -92,4 +92,6 @@ router.get('/add-editor', viewsController.addEditor);
 
 router.get('/editors', viewsController.editEditor);
 
+router.get('/edit-user-role', viewsController.editRole);
+
 module.exports = router;

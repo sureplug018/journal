@@ -9,26 +9,45 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="icon" href="/assets/images/favicon.png" type="image/x-icon">
   <title><%= title %> | The Flagship Journal</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="icon" href="/images/favicon.png" type="image/x-icon">
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/normalize.css">
-  <link rel="stylesheet" href="/css/fontawesome/fontawesome-all.css">
-  <link rel="stylesheet" href="/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/css/linearicons.css">
-  <link rel="stylesheet" href="/css/themify-icons.css">
-  <link rel="stylesheet" href="/css/scrollbar.css">
-  <link rel="stylesheet" href="/css/owl.carousel.css">
-  <link rel="stylesheet" href="/css/chartist.css">
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/dashboard.css">
-  <link rel="stylesheet" href="/css/color.css">
-  <link rel="stylesheet" href="/css/transitions.css">
-  <link rel="stylesheet" href="/css/responsive.css">
-  <script src="/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/fontawesome/fontawesome-all.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/linearicons.css">
+  <link rel="stylesheet" href="/assets/css/themify-icons.css">
+  <link rel="stylesheet" href="/assets/css/scrollbar.css">
+  <link rel="stylesheet" href="/assets/css/owl.carousel.css">
+  <link rel="stylesheet" href="/assets/css/chartist.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/dashboard.css">
+  <link rel="stylesheet" href="/assets/css/color.css">
+  <link rel="stylesheet" href="/assets/css/transitions.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <script src="/assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+  <!-- Smartsupp Live Chat script -->
+  <script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = '4529fd753bc64ee5e3a00068e4d1d107eff178e1';
+    window.smartsupp || (function(d) {
+      var s, c, o = smartsupp = function() {
+        o._.push(arguments)
+      };
+      o._ = [];
+      s = d.getElementsByTagName('script')[0];
+      c = d.createElement('script');
+      c.type = 'text/javascript';
+      c.charset = 'utf-8';
+      c.async = true;
+      c.src = 'https://www.smartsuppchat.com/loader.js?';
+      s.parentNode.insertBefore(c, s);
+    })(document);
+  </script>
+  <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
 </head>
 
 <body class="sj-userlogin">
@@ -75,7 +94,7 @@
                   <div class="sj-userloginarea">
                     <a href="javascript:void(0);">
                       <i class="fa fa-angle-down"></i>
-                      <img src="/images/user-img.jpg" alt="image description">
+                      <img src="/assets/images/user-img.jpg" alt="image description">
                       <div class="sj-loginusername">
                         <h3>Hi, <%= user.firstName %></h3>
                         <span><%= user.role %></span>
@@ -85,7 +104,8 @@
                 </div>
               </div>
               <div class="sj-navigationarea">
-                <strong class="sj-logo"><a href="/"><img src="/images/logo.jpeg" style="width: 250px; height: auto;" alt="company logo here"></a></strong>                <!-- <div class="sj-rightarea">
+                <strong class="sj-logo"><a href="/"><img src="/assets/images/logo.jpeg" style="width: 600px; height: auto;" alt="company logo here"></a></strong>
+                <!-- <div class="sj-rightarea">
                   <nav id="sj-nav" class="sj-nav navbar-expand-lg">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                       <i class="lnr lnr-menu"></i>

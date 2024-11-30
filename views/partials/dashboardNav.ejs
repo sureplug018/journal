@@ -29,6 +29,21 @@
           <li><a href="/supports"><i class="lnr lnr-envelope"></i> <span>Support Tickets</span></a></li>
           <% } %>
 
+          <% if(user.role === 'super-admin'){ %>
+          <li><a href="/admin/dashboard"><i class="lnr lnr-briefcase"></i> <span>Dashboard</span></a></li>
+          <li><a href="/article/under-review"><i class="lnr lnr-sync"></i> <span>Articles Under Review</span></a></li>
+          <li><a href="/journals"><i class="lnr lnr-book"></i> <span>Journals</span></a></li>
+          <li><a href="/add-journal"><i class="lnr lnr-book"></i> <span>Add Journal</span></a></li>
+          <li><a href="/users"><i class="lnr lnr-users"></i> <span>Manage Users</span></a></li>
+          <li><a href="/add-event"><i class="lnr lnr-gift"></i> <span>Add Event</span></a></li>
+          <li><a href="/event-list"><i class="lnr lnr-gift"></i> <span>Events</span></a></li>
+          <li><a href="/editors"><i class="lnr lnr-highlight"></i> <span>Editorial Members</span></a></li>
+          <li><a href="/add-editor"><i class="lnr lnr-highlight"></i> <span>Add Editor</span></a></li>
+          <li><a href="/scope"><i class="lnr lnr-magnifier"></i> <span>Scope</span></a></li>
+          <li><a href="/supports"><i class="lnr lnr-envelope"></i> <span>Support Tickets</span></a></li>
+          <li><a href="/edit-user-role"><i class="lnr lnr-highlight"></i> <span>User Role Management</span></a></li>
+          <% } %>
+
           <% if(user.role === 'user'){ %>
           <li><a href="/submit-article"><i class="lnr lnr-pencil"></i> <span>Submit Article</span></a></li>
           <li><a href="/contact-support"><i class="lnr lnr-phone"></i> <span>Contact Support</span></a></li>
