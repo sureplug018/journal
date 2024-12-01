@@ -14,7 +14,7 @@ router.post(
 
 router.get('/find-article', articleController.searchArticle);
 
-router.use(authController.protect, authController.restrictTo('admin'));
+router.use(authController.protect, authController.restrictTo('admin', 'super-admin'));
 
 router.post(
   '/create-article/:journalId',

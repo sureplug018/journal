@@ -12,7 +12,7 @@ router
   .route('/')
   .get(
     authController.protect,
-    authController.restrictTo('admin'),
+    authController.restrictTo('admin', 'super-admin'),
     supportController.getAllSupports,
   );
 
@@ -20,7 +20,7 @@ router
   .route('/reply-support/:supportId')
   .post(
     authController.protect,
-    authController.restrictTo('admin'),
+    authController.restrictTo('admin', 'super-admin'),
     supportController.replySupport,
   );
 
@@ -28,7 +28,7 @@ router
   .route('/send-mail/:id')
   .post(
     authController.protect,
-    authController.restrictTo('admin'),
+    authController.restrictTo('admin', 'super-admin'),
     supportController.sendMail,
   );
 

@@ -38,7 +38,7 @@ router.patch(
 router.delete(
   '/deleteUser/:id',
   authController.protect,
-  authController.restrictTo('admin'),
+  authController.restrictTo('admin', 'super-admin'),
   authController.deleteUser,
 );
 

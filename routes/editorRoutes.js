@@ -4,7 +4,7 @@ const editorController = require('../controllers/editorController');
 
 const router = express.Router();
 
-router.use(authController.protect, authController.restrictTo('admin'));
+router.use(authController.protect, authController.restrictTo('admin', 'super-admin'));
 
 router.post('/create-editor', editorController.createEditor);
 

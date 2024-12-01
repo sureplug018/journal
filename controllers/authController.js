@@ -131,7 +131,7 @@ exports.confirmEmailFE = async (req, res, next) => {
 
     // check if the token exists
     if (!user || user.confirmationTokenExpires < Date.now()) {
-      return res.status(500).render('error', {
+      return res.status(500).render('404', {
         title: 'Error',
         user,
         message: 'Invalid or expired verification link! try signing up again',
@@ -149,7 +149,7 @@ exports.confirmEmailFE = async (req, res, next) => {
     await new Email(user, url).sendWelcome();
     next();
   } catch (err) {
-    return res.status(500).render('error', {
+    return res.status(500).render('404', {
       title: 'Error',
       message: 'Something went wrong',
     });
@@ -484,7 +484,7 @@ exports.protect = async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return res.status(404).render('error', {
+      return res.status(404).render('404', {
         title: 'Error',
       });
     }
