@@ -285,7 +285,7 @@ exports.loginAdmin = async (req, res) => {
       return;
     }
 
-    if (user.role !== 'admin') {
+    if (user.role !== 'admin' && user.role !== 'super-admin') {
       return res.status(401).json({
         status: 'fail',
         message: 'Incorrect password or email',
