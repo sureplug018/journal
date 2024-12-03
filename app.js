@@ -37,7 +37,10 @@ app.use(cookieParser());
 // DATA SANITIZATION
 app.use(mongoSanitize());
 
-app.use(express.static('./public'));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use(express.static('./public'));
 
 // routes
 app.use('/', viewsRoutes);
