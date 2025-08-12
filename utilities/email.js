@@ -9,7 +9,7 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.firstName; // Corrected splitting method
     this.url = url;
-    this.from = '"The Flagship Journal" <editor@theflagshipjournal.org>';
+    this.from = '"The Flagship Journal" <editor@theflagshipjournal.com>';
   }
 
   newTransport() {
