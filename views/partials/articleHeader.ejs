@@ -1,0 +1,183 @@
+<!doctype html>
+<!--[if lt IE 7]>		<html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>			<html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>			<html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="zxx">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.png">
+  <title><%= article.title %> | The Flagship Journal</title>
+  <!-- Meta Description -->
+  <meta name="description" content="The Flagship Journal publishes praxis-oriented research in social sciences, arts, and humanities. Submit your scholarly articles today!">
+  <!-- Meta Keywords -->
+  <meta name="keywords" content="academic journal, social sciences research, humanities studies, research publication">
+
+  <!-- Meta Author -->
+  <meta name="author" content="The Flagship Journal">
+
+  <!-- Open Graph for Social Media Sharing -->
+  <meta property="og:title" content="The Flagship Journal | <%= article.title %>">
+  <meta property="og:description" content="<%= article.article.split('.')[0] %>">
+  <meta property="og:image" content="https://theflagshipjournal.com/assets/images/logo.jpeg">
+  <meta property="og:url" content="https://theflagshipjournal.com">
+  <meta property="og:type" content="website">
+
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#6e3f29">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#6e3f29">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "The Flagship Journal",
+      "url": "https://theflagshipjournal.com",
+      "logo": "https://theflagshipjournal.com/assets/images/logo.jpeg",
+      "description": "The Flagship Journal publishes praxis-oriented research in social sciences, arts, and humanities. Submit your scholarly articles today!",
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/normalize.css">
+  <link rel="stylesheet" href="/assets/css/fontawesome/fontawesome-all.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/linearicons.css">
+  <link rel="stylesheet" href="/assets/css/themify-icons.css">
+  <link rel="stylesheet" href="/assets/css/owl.carousel.css">
+  <link rel="stylesheet" href="/assets/css/chartist.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/color.css">
+  <link rel="stylesheet" href="/assets/css/transitions.css">
+  <link rel="stylesheet" href="/assets/css/responsive.css">
+  <script src="/assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+  <!-- Smartsupp Live Chat script -->
+  <script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = '4529fd753bc64ee5e3a00068e4d1d107eff178e1';
+    window.smartsupp || (function(d) {
+      var s, c, o = smartsupp = function() {
+        o._.push(arguments)
+      };
+      o._ = [];
+      s = d.getElementsByTagName('script')[0];
+      c = d.createElement('script');
+      c.type = 'text/javascript';
+      c.charset = 'utf-8';
+      c.async = true;
+      c.src = 'https://www.smartsuppchat.com/loader.js?';
+      s.parentNode.insertBefore(c, s);
+    })(document);
+  </script>
+  <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
+</head>
+
+<body class="sj-home">
+  <!--[if lt IE 8]>
+		<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+	<![endif]-->
+  <!--************************************
+				Preloader Start
+	*************************************-->
+  <div class="preloader-outer">
+    <div class='loader'>
+      <div class='loader--dot'></div>
+      <div class='loader--dot'></div>
+      <div class='loader--dot'></div>
+      <div class='loader--dot'></div>
+    </div>
+  </div>
+  <!--************************************
+				Preloader End
+	*************************************-->
+  <!--************************************
+			Wrapper Start
+	*************************************-->
+  <div id="sj-wrapper" class="sj-wrapper">
+    <!--************************************
+				Content Wrapper Start
+		*************************************-->
+    <div class="sj-contentwrapper">
+      <!--************************************
+					Header Start
+			*************************************-->
+      <header id="sj-header" class="sj-header sj-haslayout">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <div class="sj-topbar">
+                <!-- <ul class="sj-socialicons sj-socialiconssimple">
+                  <li class="sj-facebook"><a href="javascript:void(0);"><i class="fa fa-facebook-f"></i></a></li>
+                  <li class="sj-twitter"><a href="javascript:void(0);"><i class="fab fa-twitter"></i></a></li>
+                  <li class="sj-linkedin"><a href="javascript:void(0);"><i class="fab fa-linkedin-in"></i></a></li>
+                  <li class="sj-googleplus"><a href="javascript:void(0);"><i class="fab fa-google-plus-g"></i></a></li>
+                </ul> -->
+                <div class="sj-languagelogin">
+                  <% if(!user){ %>
+                  <div class="sj-loginarea">
+                    <ul class="sj-loging">
+                      <li><a href="/login">Login</a></li>
+                      <li><a href="/sign-up">Register</a></li>
+                    </ul>
+                  </div>
+                  <% } %>
+                  <% if(user) { %>
+                  <div class="sj-loginarea" style="display: flex; align-items: center;">
+                    <i class="fa fa-user" style="font-size: 35px; color: #6E3F29;"></i>
+                    <a href="/account" style="text-decoration: none;">
+                      <div class="sj-loginusername" style="display: inline-block;">
+                        <h3>Hi, <%= user.firstName %></h3>
+                        <!-- <span>Author</span> -->
+                      </div>
+                    </a>
+                  </div>
+                  <% } %>
+                </div>
+              </div>
+              <div class="sj-navigationarea">
+                <strong class="sj-logo"><a href="/"><img src="/assets/images/logo.jpeg" style="width: 600px; height: auto;" alt="company logo here"></a></strong>
+                <div class="sj-rightarea">
+                  <nav id="sj-nav" class="sj-nav navbar-expand-lg">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                      <i class="lnr lnr-menu"></i>
+                    </button>
+                    <div class="collapse navbar-collapse sj-navigation" id="navbarNav">
+                      <ul>
+                        <li>
+                          <a href="/"><i class="lnr lnr-home"></i> Home</a>
+                        </li>
+                        <li>
+                          <a href="/about-us">About</a>
+                        </li>
+                        <li>
+                          <a href="/editorial-team">Editorial Team</a>
+                        </li>
+                        <li>
+                          <a href="/submission-guidelines">Submission Guidelines</a>
+                        </li>
+                        <li><a href="/journal-issues">Journal Issues</a></li>
+                        <li>
+                          <a href="/events">Events</a>
+                        </li>
+                        <li>
+                          <a href="/contact-us">Contact</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </nav>
+                  <!-- <a class="sj-btntopsearch" href="index.html#sj-searcharea"><i class="lnr lnr-magnifier"></i></a> -->
+                  <% if(user){ %>
+                  <a class="sj-btn sj-btnactive" href="/submit-article">Submit Your Article</a>
+                  <% }else{ %>
+                  <a class="sj-btn sj-btnactive" href="/login">Submit Your Article</a>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!--************************************
+					Header End
+			*************************************-->
